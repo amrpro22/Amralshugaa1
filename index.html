@@ -8,7 +8,7 @@
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
     
-    <!-- Google Fonts (تُركت Caveat لتوقيع آبل الجمالي فقط) -->
+    <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@700&display=swap" rel="stylesheet">
@@ -149,9 +149,79 @@
             0% { transform: rotate(0deg); }
             100% { transform: rotate(360deg); }
         }
+
+        /* تنسيق رسالة عدم الاتصال */
+        .offline-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0,0,0,0.7);
+            backdrop-filter: blur(10px);
+            z-index: 9999;
+            display: none;
+            align-items: center;
+            justify-content: center;
+        }
+        .offline-overlay.active {
+            display: flex;
+        }
+        .offline-card {
+            background: white;
+            padding: 40px;
+            border-radius: 24px;
+            max-width: 400px;
+            text-align: center;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+        }
+        .dark .offline-card {
+            background: #1e293b;
+            color: white;
+        }
+        .offline-card i {
+            font-size: 48px;
+            color: #ef4444;
+            margin-bottom: 16px;
+        }
+        .offline-card h3 {
+            font-size: 20px;
+            font-weight: bold;
+            margin-bottom: 8px;
+        }
+        .offline-card p {
+            font-size: 14px;
+            opacity: 0.7;
+            margin-bottom: 20px;
+        }
+        .offline-card button {
+            background: #22c55e;
+            color: white;
+            border: none;
+            padding: 12px 32px;
+            border-radius: 12px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+        .offline-card button:hover {
+            background: #16a34a;
+        }
     </style>
 </head>
 <body class="bg-slate-50 text-slate-800 dark:bg-slate-900 dark:text-slate-100 min-h-screen flex flex-col antialiased">
+
+    <!-- طبقة منع الاستخدام عند عدم الاتصال -->
+    <div id="offline-overlay" class="offline-overlay">
+        <div class="offline-card">
+            <i class="fa-solid fa-wifi-slash"></i>
+            <h3>❌ لا يوجد اتصال بالسحابة</h3>
+            <p>هذا التطبيق يعمل فقط مع اتصال الإنترنت.<br>يرجى التحقق من شبكتك والمحاولة مرة أخرى.</p>
+            <button onclick="window.location.reload()">
+                <i class="fa-solid fa-rotate ml-2"></i> إعادة المحاولة
+            </button>
+        </div>
+    </div>
 
     <!-- شريط الأدوات العلوي -->
     <header class="no-print sticky top-0 z-40 backdrop-blur-md bg-white/80 dark:bg-slate-900/80 border-b border-slate-200 dark:border-slate-800">
@@ -197,7 +267,7 @@
                     <i class="fa-solid fa-triangle-exclamation text-xl"></i>
                 </div>
                 <h3 class="text-lg font-bold text-slate-900 dark:text-white text-center mb-2">تأكيد الإجراء الهام</h3>
-                <p class="text-sm text-slate-500 dark:text-slate-400 text-center mb-6">هل أنت متأكد من رغبتك في حذف جميع التواقيع والاعتمادات؟ لا يمكن التراجع عن هذا القرار.</p>
+                <p class="text-sm text-slate-500 dark:text-slate-400 text-center mb-6">هل أنت متأكد من رغبتك في حذف جميع التواقيع والاعتمادات من السحابة؟ لا يمكن التراجع عن هذا القرار.</p>
                 <div class="flex gap-3">
                     <button id="modal-confirm-btn" class="flex-1 py-3 bg-red-600 hover:bg-red-700 text-white rounded-xl text-sm font-bold transition-colors">نعم، امسح الكل</button>
                     <button onclick="closeCustomModal()" class="flex-1 py-3 bg-slate-100 hover:bg-slate-200 dark:bg-slate-700 dark:hover:bg-slate-600 text-slate-700 dark:text-slate-300 rounded-xl text-sm font-bold transition-colors">إلغاء</button>
@@ -205,18 +275,22 @@
             </div>
         </div>
 
-        <!-- لوحة حالة التخزين / الاتصال السحابي -->
+        <!-- لوحة حالة الاتصال السحابي -->
         <div class="no-print mb-6 p-4 rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-850 flex items-center justify-between flex-wrap gap-4 shadow-sm">
             <div class="flex items-center gap-3">
                 <div class="relative flex h-3 w-3">
-                    <span id="sync-ping" class="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>
-                    <span id="sync-dot" class="relative inline-flex rounded-full h-3 w-3 bg-green-500"></span>
+                    <span id="sync-ping" class="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+                    <span id="sync-dot" class="relative inline-flex rounded-full h-3 w-3 bg-emerald-500"></span>
                 </div>
                 <div>
-                    <span id="sync-status-label" class="text-xs font-extrabold text-slate-800 dark:text-slate-200 block">جاري تحميل النظام...</span>
-                    <span id="sync-sub-label" class="text-[10px] text-slate-400 block">يرجى الانتظار لتحديث البيانات</span>
+                    <span id="sync-status-label" class="text-xs font-extrabold text-slate-800 dark:text-slate-200 block">✅ متصل بالسحابة</span>
+                    <span id="sync-sub-label" class="text-[10px] text-slate-400 block">مزامنة فورية مع قاعدة البيانات</span>
                 </div>
             </div>
+            <button onclick="triggerResetConfirm()" class="text-xs font-bold px-4 py-2 rounded-xl bg-red-50 hover:bg-red-100 dark:bg-red-950/20 dark:hover:bg-red-950/30 text-red-600 dark:text-red-400 transition-colors flex items-center gap-2">
+                <i class="fa-solid fa-trash-can"></i>
+                <span>مسح جميع التواقيع</span>
+            </button>
         </div>
 
         <!-- بطاقة الخطاب الرسمية -->
@@ -320,7 +394,7 @@
                         </div>
                         <div>
                             <h3 class="text-base font-black text-slate-900 dark:text-white">اعتماد وتوقيع وثيقة الاستقالة</h3>
-                            <p class="text-xs text-slate-400 dark:text-slate-500">توقيعك يثبت موافقتك أو رفضك للطلب في السجل</p>
+                            <p class="text-xs text-slate-400 dark:text-slate-500">توقيعك يثبت موافقتك أو رفضك للطلب في السحابة</p>
                         </div>
                     </div>
                     
@@ -372,13 +446,13 @@
                         <span>الاعتمادات والتواقيع الرسمية لأعضاء الإدارة</span>
                     </h3>
                     <div class="flex items-center gap-2">
-                        <span class="text-xs font-bold text-slate-500">مجموع الموافقين:</span>
+                        <span class="text-xs font-bold text-slate-500">عدد الموقعين:</span>
                         <span id="count-badge" class="text-xs bg-brand-500 text-white font-black px-3 py-1 rounded-full shadow-sm">0</span>
                     </div>
                 </div>
                 
                 <div id="signatures-grid" class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <!-- التواقيع يتم توليدها ديناميكياً -->
+                    <!-- التواقيع يتم توليدها ديناميكياً من السحابة -->
                 </div>
             </div>
         </div>
@@ -388,8 +462,8 @@
     <footer class="no-print bg-slate-100 dark:bg-slate-950 text-slate-500 dark:text-slate-400 text-xs py-5 border-t border-slate-200 dark:border-slate-900 mt-10">
         <div class="max-w-4xl mx-auto px-4 flex flex-col sm:flex-row justify-between items-center gap-3">
             <div class="flex items-center gap-2">
-                <i class="fa-solid fa-shield-halved text-brand-500"></i>
-                <span id="footer-sync-mode">نظام المزامنة الذاتية الاحتياطي مفعّل</span>
+                <i class="fa-solid fa-cloud text-brand-500"></i>
+                <span id="footer-sync-mode">✅ متصل بالسحابة - مزامنة فورية</span>
             </div>
             <div class="flex items-center gap-1.5">
                 <span>المنصة مطورة بالكامل بواسطة</span>
@@ -398,123 +472,93 @@
         </div>
     </footer>
 
-    <!-- Firebase Scripts and Setup (Supports Cloud Sync with fallback to LocalStorage) -->
+    <!-- Firebase Scripts -->
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
-        import { getAuth, signInAnonymously, signInWithCustomToken, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
-        import { getFirestore, collection, doc, addDoc, onSnapshot, query, deleteDoc, getDocs } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+        import { getFirestore, collection, addDoc, onSnapshot, query, deleteDoc, getDocs, orderBy } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
 
-        // ثوابت وتهيئة النظام والتخزين المزدوج
-        const STORAGE_KEY = 'resignation_signatures';
+        // ======== إعدادات Firebase ========
+        const firebaseConfig = {
+            apiKey: "AIzaSyA5_Ve3nlaiuoMw35qvjxcZCQw-nmTvn6Y",
+            authDomain: "amr4ever-6efa4.firebaseapp.com",
+            projectId: "amr4ever-6efa4",
+            storageBucket: "amr4ever-6efa4.firebasestorage.app",
+            messagingSenderId: "171559645299",
+            appId: "1:171559645299:web:d9ad8481f49e2b921e3a06"
+        };
+
         const appId = 'amr4ever-6efa4';
         let db = null;
-        let auth = null;
-        let currentUser = null;
-        let isCloudMode = false;
         let unsubscribeSignatures = null;
+        let isConnected = false;
 
-        // تهيئة قواعد البيانات وقناة الاتصال
-        async function setupSystem() {
-            const statusLabel = document.getElementById('sync-status-label');
-            const subLabel = document.getElementById('sync-sub-label');
-            const ping = document.getElementById('sync-ping');
-            const dot = document.getElementById('sync-dot');
-            const footerMode = document.getElementById('footer-sync-mode');
+        // ======== عناصر التحكم ========
+        const statusLabel = document.getElementById('sync-status-label');
+        const subLabel = document.getElementById('sync-sub-label');
+        const ping = document.getElementById('sync-ping');
+        const dot = document.getElementById('sync-dot');
+        const footerMode = document.getElementById('footer-sync-mode');
+        const offlineOverlay = document.getElementById('offline-overlay');
 
+        // ======== تهيئة Firebase بدون مصادقة ========
+        async function initFirebase() {
             try {
-                // بيانات Firebase المدمجة مباشرة
-                const firebaseConfig = {
-                    apiKey: "AIzaSyA5_Ve3nlaiuoMw35qvjxcZCQw-nmTvn6Y",
-                    authDomain: "amr4ever-6efa4.firebaseapp.com",
-                    projectId: "amr4ever-6efa4",
-                    storageBucket: "amr4ever-6efa4.firebasestorage.app",
-                    messagingSenderId: "171559645299",
-                    appId: "1:171559645299:web:d9ad8481f49e2b921e3a06"
-                };
-
                 const app = initializeApp(firebaseConfig);
-                auth = getAuth(app);
                 db = getFirestore(app);
-
-                // المصادقة المجهولة
-                await signInAnonymously(auth);
-
-                onAuthStateChanged(auth, (user) => {
-                    if (user) {
-                        currentUser = user;
-                        isCloudMode = true;
-                        
-                        statusLabel.innerText = "متصل بالسحابة (مزامنة حية)";
-                        subLabel.innerText = "يتم الحفظ والتحديث في قاعدة البيانات لحظياً لجميع الأجهزة";
-                        ping.className = "animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75";
-                        dot.className = "relative inline-flex rounded-full h-3 w-3 bg-emerald-500";
-                        footerMode.innerHTML = `<i class="fa-solid fa-cloud text-emerald-500"></i> خوادم السحابة متصلة ونشطة`;
-                        
-                        // تشغيل مستمع السحابة
-                        listenToCloudSignatures();
-                    } else {
-                        activateLocalStorageFallback();
-                    }
-                });
+                isConnected = true;
+                offlineOverlay.classList.remove('active');
+                
+                statusLabel.innerText = "✅ متصل بالسحابة";
+                subLabel.innerText = "مزامنة فورية مع قاعدة البيانات";
+                ping.className = "animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75";
+                dot.className = "relative inline-flex rounded-full h-3 w-3 bg-emerald-500";
+                footerMode.innerHTML = `<i class="fa-solid fa-cloud text-emerald-500"></i> ✅ متصل بالسحابة - مزامنة فورية`;
+                
+                // تشغيل مستمع السحابة
+                listenToCloudSignatures();
             } catch (error) {
-                console.error("Firebase connection failed, switching to Local Mode:", error);
-                activateLocalStorageFallback();
+                console.error("Firebase connection failed:", error);
+                handleDisconnect();
             }
         }
 
-        function activateLocalStorageFallback() {
-            isCloudMode = false;
-            const statusLabel = document.getElementById('sync-status-label');
-            const subLabel = document.getElementById('sync-sub-label');
-            const ping = document.getElementById('sync-ping');
-            const dot = document.getElementById('sync-dot');
-            const footerMode = document.getElementById('footer-sync-mode');
-
-            statusLabel.innerText = "وضع حفظ متصفحك محلياً";
-            subLabel.innerText = "يتم تخزين التواقيع داخل ذاكرة المتصفح الحالي لعدم توفر خادم سحابي";
-            ping.className = "absolute inline-flex h-full w-full rounded-full bg-amber-400 opacity-75";
-            dot.className = "relative inline-flex rounded-full h-3 w-3 bg-amber-500";
-            footerMode.innerHTML = `<i class="fa-solid fa-hdd text-amber-500"></i> التخزين المحلي الآمن نشط`;
-
-            renderLocalSignatures();
+        // ======== معالجة انقطاع الاتصال ========
+        function handleDisconnect() {
+            isConnected = false;
+            offlineOverlay.classList.add('active');
+            
+            statusLabel.innerText = "❌ غير متصل بالسحابة";
+            subLabel.innerText = "يرجى التحقق من اتصال الإنترنت";
+            ping.className = "absolute inline-flex h-full w-full rounded-full bg-red-400";
+            dot.className = "relative inline-flex rounded-full h-3 w-3 bg-red-500";
+            footerMode.innerHTML = `<i class="fa-solid fa-wifi-slash text-red-500"></i> ❌ غير متصل - يرجى التحقق من الشبكة`;
         }
 
-        // الاستماع للتواقيع من السحابة في الوقت الفعلي
+        // ======== الاستماع للتواقيع من السحابة ========
         function listenToCloudSignatures() {
-            if (!db || !currentUser) return;
+            if (!db) return;
             
             const publicCollection = collection(db, 'artifacts', appId, 'public', 'data', 'signatures');
+            const q = query(publicCollection, orderBy('timestamp', 'asc'));
             
-            unsubscribeSignatures = onSnapshot(publicCollection, (snapshot) => {
+            if (unsubscribeSignatures) {
+                unsubscribeSignatures();
+            }
+            
+            unsubscribeSignatures = onSnapshot(q, (snapshot) => {
                 const signatures = [];
                 snapshot.forEach((doc) => {
                     signatures.push({ id: doc.id, ...doc.data() });
                 });
                 
-                signatures.sort((a, b) => a.timestamp - b.timestamp);
                 displaySignaturesUI(signatures);
             }, (error) => {
                 console.error("Error reading signatures from cloud:", error);
-                showToast("⚠️ حدث خطأ أثناء جلب البيانات السحابية.", "error");
+                showToast("⚠️ حدث خطأ أثناء جلب البيانات السحابية", "error");
             });
         }
 
-        // عرض التواقيع المحلية
-        function renderLocalSignatures() {
-            const signatures = getLocalSignatures();
-            displaySignaturesUI(signatures);
-        }
-
-        function getLocalSignatures() {
-            try {
-                const data = localStorage.getItem(STORAGE_KEY);
-                return data ? JSON.parse(data) : [];
-            } catch {
-                return [];
-            }
-        }
-
-        // تشييد وبناء واجهة التواقيع
+        // ======== عرض التواقيع ========
         function displaySignaturesUI(signatures) {
             const grid = document.getElementById('signatures-grid');
             const countBadge = document.getElementById('count-badge');
@@ -524,7 +568,7 @@
                 grid.innerHTML = `
                     <div class="col-span-full text-center py-10 text-slate-400 dark:text-slate-500 italic bg-slate-50 dark:bg-slate-850/40 rounded-2xl border border-dashed border-slate-200 dark:border-slate-700/80 text-sm">
                         <i class="fa-solid fa-signature text-3xl mb-3 block text-slate-300 dark:text-slate-600"></i>
-                        <span>في انتظار توقيع واعتماد بقية أعضاء الإدارة الموقرين...</span>
+                        <span>📝 في انتظار توقيع واعتماد أعضاء الإدارة...</span>
                     </div>
                 `;
                 return;
@@ -550,7 +594,7 @@
                     <div class="vote-card p-5 rounded-2xl border bg-gradient-to-br ${cardBg} relative overflow-hidden flex flex-col justify-between">
                         <div>
                             <div class="flex justify-between items-start gap-2 mb-3">
-                                <span class="text-[9px] font-black tracking-widest text-slate-400 dark:text-slate-500 uppercase">مستند توقيع رقمي #${index + 1}</span>
+                                <span class="text-[9px] font-black tracking-widest text-slate-400 dark:text-slate-500 uppercase">توقيع #${index + 1}</span>
                                 <span class="px-2 py-0.5 text-[10px] font-black rounded-md ${badgeClass} flex items-center gap-1.5 shrink-0">
                                     ${statusIcon} ${decisionText}
                                 </span>
@@ -565,7 +609,7 @@
                         <div class="mt-4 pt-3 border-t border-slate-200/50 dark:border-slate-700/50 flex justify-between items-center text-[10px] text-slate-400 dark:text-slate-500">
                             <span class="font-semibold">${vote.time}</span>
                             <span class="flex items-center gap-1 text-brand-600 dark:text-brand-400 font-bold">
-                                <i class="fa-solid fa-shield-halved"></i> معتمد آمن
+                                <i class="fa-solid fa-cloud"></i> سحابي
                             </span>
                         </div>
                     </div>
@@ -573,8 +617,13 @@
             }).join('');
         }
 
-        // دالة إرسال واعتماد التوقيع
+        // ======== إرسال التوقيع ========
         window.submitMemberVote = async () => {
+            if (!isConnected || !db) {
+                showToast("❌ لا يوجد اتصال بالسحابة، يرجى التحقق من الإنترنت", "error");
+                return;
+            }
+
             const nameInput = document.getElementById('vote-member-name');
             const jobInput = document.getElementById('vote-member-job');
             const submitBtn = document.getElementById('submit-btn');
@@ -586,21 +635,21 @@
             jobInput.classList.remove('error');
 
             if (!name) {
-                showToast("⚠️ فضلاً، اكتب اسمك الثلاثي للاعتماد الرسمي", "warning");
+                showToast("⚠️ يرجى كتابة اسمك الثلاثي للاعتماد", "warning");
                 nameInput.classList.add('error');
                 nameInput.focus();
                 return;
             }
 
             if (!job) {
-                showToast("⚠️ يرجى تعبئة الحقل بالمنصب الإداري الحالي", "warning");
+                showToast("⚠️ يرجى تعبئة المنصب الإداري", "warning");
                 jobInput.classList.add('error');
                 jobInput.focus();
                 return;
             }
 
             submitBtn.disabled = true;
-            submitBtnText.innerHTML = `<span class="flex items-center justify-center gap-2"><span class="spinner"></span> جاري توثيق وإرسال توقيعك...</span>`;
+            submitBtnText.innerHTML = `<span class="flex items-center justify-center gap-2"><span class="spinner"></span> جاري الحفظ في السحابة...</span>`;
 
             try {
                 const now = new Date();
@@ -615,42 +664,27 @@
                     timestamp: Date.now()
                 };
 
-                if (isCloudMode) {
-                    const signaturesRef = collection(db, 'artifacts', appId, 'public', 'data', 'signatures');
-                    const snapshot = await getDocs(signaturesRef);
-                    let isDuplicate = false;
-                    
-                    snapshot.forEach((doc) => {
-                        if (doc.data().name.toLowerCase() === name.toLowerCase()) {
-                            isDuplicate = true;
-                        }
-                    });
-
-                    if (isDuplicate) {
-                        showToast(`⚠️ هذا الاسم "${name}" مسجل بالتوقيع مسبقاً في السحابة`, "warning");
-                        nameInput.classList.add('error');
-                        nameInput.focus();
-                        resetSubmitButton();
-                        return;
+                const signaturesRef = collection(db, 'artifacts', appId, 'public', 'data', 'signatures');
+                
+                // التحقق من عدم التكرار
+                const snapshot = await getDocs(signaturesRef);
+                let isDuplicate = false;
+                snapshot.forEach((doc) => {
+                    if (doc.data().name?.toLowerCase() === name.toLowerCase()) {
+                        isDuplicate = true;
                     }
+                });
 
-                    await addDoc(signaturesRef, votePayload);
-                    showToast(`🎉 تم اعتماد توقيعك السحابي بنجاح يا ${name}`, "success");
-                } else {
-                    const signatures = getLocalSignatures();
-                    if (signatures.some(v => v.name.toLowerCase() === name.toLowerCase())) {
-                        showToast(`⚠️ هذا الاسم مضاف ومثبت من قبل`, "warning");
-                        nameInput.classList.add('error');
-                        nameInput.focus();
-                        resetSubmitButton();
-                        return;
-                    }
-
-                    signatures.push(votePayload);
-                    localStorage.setItem(STORAGE_KEY, JSON.stringify(signatures));
-                    renderLocalSignatures();
-                    showToast(`✅ تم حفظ توقيعك المحلي بنجاح يا ${name}`, "success");
+                if (isDuplicate) {
+                    showToast(`⚠️ "${name}" مسجل مسبقاً في السحابة`, "warning");
+                    nameInput.classList.add('error');
+                    nameInput.focus();
+                    resetSubmitButton();
+                    return;
                 }
+
+                await addDoc(signaturesRef, votePayload);
+                showToast(`🎉 تم اعتماد توقيعك السحابي بنجاح يا ${name}`, "success");
 
                 nameInput.value = '';
                 jobInput.value = '';
@@ -658,7 +692,7 @@
 
             } catch (err) {
                 console.error("Signature processing failed:", err);
-                showToast("❌ واجهنا خطأ أثناء إتمام عملية التوقيع", "error");
+                showToast("❌ فشل حفظ التوقيع في السحابة", "error");
             } finally {
                 resetSubmitButton();
             }
@@ -669,32 +703,30 @@
             }
         };
 
-        // تفريغ وتهيئة كافة تواقيع الصندوق
+        // ======== مسح جميع التواقيع ========
         window.triggerResetConfirm = () => {
+            if (!isConnected) {
+                showToast("❌ لا يوجد اتصال بالسحابة", "error");
+                return;
+            }
             openCustomModal(async () => {
                 const submitBtn = document.getElementById('submit-btn');
                 submitBtn.disabled = true;
                 
                 try {
-                    if (isCloudMode) {
-                        const signaturesRef = collection(db, 'artifacts', appId, 'public', 'data', 'signatures');
-                        const snapshot = await getDocs(signaturesRef);
-                        const deletePromises = [];
-                        
-                        snapshot.forEach((docSnap) => {
-                            deletePromises.push(deleteDoc(doc(db, 'artifacts', appId, 'public', 'data', 'signatures', docSnap.id)));
-                        });
-                        
-                        await Promise.all(deletePromises);
-                        showToast("🗑️ تم تفريغ ومسح السحابة كاملة بنجاح", "success");
-                    } else {
-                        localStorage.removeItem(STORAGE_KEY);
-                        renderLocalSignatures();
-                        showToast("🗑️ تم إخلاء كافة التواقيع المحلية وحذفها", "success");
-                    }
+                    const signaturesRef = collection(db, 'artifacts', appId, 'public', 'data', 'signatures');
+                    const snapshot = await getDocs(signaturesRef);
+                    const deletePromises = [];
+                    
+                    snapshot.forEach((docSnap) => {
+                        deletePromises.push(deleteDoc(doc(db, 'artifacts', appId, 'public', 'data', 'signatures', docSnap.id)));
+                    });
+                    
+                    await Promise.all(deletePromises);
+                    showToast("🗑️ تم مسح جميع التواقيع من السحابة", "success");
                 } catch (error) {
                     console.error("Purge error:", error);
-                    showToast("❌ فشل حذف السجلات، يرجى المحاولة لاحقاً", "error");
+                    showToast("❌ فشل مسح السجلات", "error");
                 } finally {
                     submitBtn.disabled = false;
                     closeCustomModal();
@@ -702,9 +734,9 @@
             });
         };
 
-        // بدء تشغيل النظام بالتحميل
+        // ======== بدء التشغيل ========
         document.addEventListener('DOMContentLoaded', () => {
-            setupSystem();
+            initFirebase();
         });
     </script>
 
@@ -745,7 +777,7 @@
             }
         };
 
-        // ======== تفعيل وإدارة النوافذ المنبثقة ========
+        // ======== نظام المودال ========
         let activeModalConfirmCallback = null;
 
         function openCustomModal(onConfirmCallback) {
@@ -780,7 +812,7 @@
             }
         });
 
-        // ======== دالة عرض رسائل التنبيه ========
+        // ======== Toast Notifications ========
         function showToast(message, type = "success") {
             const toast = document.getElementById('toast');
             const toastMessage = document.getElementById('toast-message');
@@ -808,7 +840,7 @@
             }, 4000);
         }
 
-        // ======== دالة تنظيف النصوص ========
+        // ======== تنظيف النصوص ========
         function escapeHtml(text) {
             return text
                 .replace(/&/g, "&amp;")
@@ -818,7 +850,7 @@
                 .replace(/'/g, "&#039;");
         }
 
-        // ======== دالة نسخ النص ========
+        // ======== نسخ النص ========
         window.copyLetterText = () => {
             const letterText = `التاريخ: 23 / 06 / 2026
 
@@ -854,9 +886,9 @@
             textarea.select();
             try {
                 document.execCommand('copy');
-                showToast("📋 تم نسخ نص وثيقة الاستقالة بالكامل في الحافظة", "success");
+                showToast("📋 تم نسخ نص الوثيقة بالكامل", "success");
             } catch (err) {
-                showToast("❌ عذراً، فشل نسخ الوثيقة التعبيرية", "error");
+                showToast("❌ فشل نسخ الوثيقة", "error");
             }
             document.body.removeChild(textarea);
         };
