@@ -1,13 +1,20 @@
+
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>خطاب استقالة رسمي - عمرو مسعد الشجاع</title>
+    
+    <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Google Fonts (تُركت Caveat لتوقيع آبل الجمالي فقط) -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@300;400;500;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@700&display=swap" rel="stylesheet">
+    
+    <!-- Font Awesome Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
     <script>
@@ -16,12 +23,25 @@
             theme: {
                 extend: {
                     fontFamily: {
-                        sans: ['Tajawal', 'sans-serif'],
+                        // إعداد خط آبل برو كخط أساسي افتراضي للنظام والأجهزة مع بدائل ذكية للأنظمة الأخرى
+                        sans: [
+                            'SF Pro', 
+                            'SF Pro Arabic', 
+                            '-apple-system', 
+                            'BlinkMacSystemFont', 
+                            '"Segoe UI"', 
+                            'Roboto', 
+                            '"Helvetica Neue"', 
+                            'Arial', 
+                            'sans-serif'
+                        ],
+                        signature: ['Caveat', 'cursive'],
                     },
                     colors: {
                         brand: {
                             50: '#f0fdf4',
                             100: '#dcfce7',
+                            200: '#bbf7d0',
                             500: '#22c55e',
                             600: '#16a34a',
                             700: '#15803d',
@@ -33,17 +53,20 @@
             }
         }
     </script>
+    
     <style>
         * {
             -webkit-tap-highlight-color: transparent;
         }
         
         body {
-            font-family: 'Tajawal', sans-serif;
+            /* تطبيق خطوط آبل برو بالتنسيق المباشر لضمان التوافقية والتغطية الكاملة */
+            font-family: 'SF Pro', 'SF Pro Arabic', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
             transition: background-color 0.3s ease, color 0.3s ease;
             overflow-x: hidden;
         }
-        
+
+        /* تنسيق مخصص للطباعة لتبدو كوثيقة رسمية فاخرة */
         @media print {
             .no-print {
                 display: none !important;
@@ -58,330 +81,649 @@
                 background: transparent !important;
                 padding: 0 !important;
                 margin: 0 !important;
+                max-width: 100% !important;
+            }
+            .print-border {
+                border: 2px solid #cbd5e1 !important;
+                padding: 30px !important;
+                border-radius: 8px !important;
             }
         }
         
         .vote-card {
-            transition: all 0.3s ease;
-        }
-        .vote-card:hover {
-            transform: translateY(-2px);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         }
         
-        /* ======== إصلاح مشكلة تكبير الحقول أثناء الكتابة ======== */
+        .vote-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 10px 20px -10px rgba(34, 197, 94, 0.3);
+        }
+
+        /* تحسينات الإدخال على الهواتف والأجهزة الذكية */
         input, textarea, select {
-            font-size: 16px !important; /* يمنع تكبير iOS تلقائياً */
+            font-size: 16px !important;
             -webkit-appearance: none;
             appearance: none;
-            border-radius: 12px;
         }
         
-        /* منع تغيير حجم الحقول */
-        input:focus, textarea:focus {
-            font-size: 16px !important;
-            transform: scale(1);
-        }
-        
-        /* تحسين الحقول للهواتف */
         .form-input {
             width: 100%;
-            padding: 12px 16px;
+            padding: 14px 16px;
             font-size: 16px !important;
             line-height: 1.5;
             border: 2px solid #e2e8f0;
-            border-radius: 12px;
+            border-radius: 14px;
             background-color: transparent;
             color: inherit;
-            transition: border-color 0.2s, box-shadow 0.2s;
-            min-height: 48px;
+            transition: all 0.25s ease;
+            min-height: 52px;
             box-sizing: border-box;
         }
         
         .form-input:focus {
             outline: none;
             border-color: #22c55e;
-            box-shadow: 0 0 0 3px rgba(34, 197, 94, 0.15);
+            box-shadow: 0 0 0 4px rgba(34, 197, 94, 0.15);
+        }
+
+        .dark .form-input {
+            border-color: #334155;
+            background-color: #1e293b;
+        }
+
+        .dark .form-input:focus {
+            border-color: #22c55e;
+            box-shadow: 0 0 0 4px rgba(34, 197, 94, 0.25);
         }
         
         .form-input.error {
-            border-color: #ef4444;
-            box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.15);
+            border-color: #ef4444 !important;
+            box-shadow: 0 0 0 4px rgba(239, 68, 68, 0.15) !important;
         }
-        
-        .form-input.dark {
-            border-color: #334155;
+
+        /* تخصيص مؤشر التحميل */
+        .spinner {
+            border: 3px solid rgba(255,255,255,0.3);
+            border-radius: 50%;
+            border-top: 3px solid #fff;
+            width: 20px;
+            height: 20px;
+            animation: spin 0.8s linear infinite;
         }
-        
-        .form-input.dark:focus {
-            border-color: #22c55e;
-            box-shadow: 0 0 0 3px rgba(34, 197, 94, 0.2);
-        }
-        
-        .form-input.dark.error {
-            border-color: #ef4444;
-            box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.2);
-        }
-        
-        /* إصلاح مشكلة التكبير على iPhone */
-        @supports (-webkit-touch-callout: none) {
-            input, textarea, select {
-                font-size: 16px !important;
-            }
-        }
-        
-        /* تحسين الضغط على الأزرار في الهواتف */
-        .btn-touch {
-            touch-action: manipulation;
-            -webkit-touch-callout: none;
-            user-select: none;
-        }
-        
-        /* منع التمرير غير المرغوب فيه */
-        .no-scroll {
-            overflow: hidden;
-        }
-        
-        /* تحسين عرض البطاقات في الهواتف */
-        @media (max-width: 640px) {
-            .signature-grid {
-                grid-template-columns: 1fr !important;
-            }
-            .letter-padding {
-                padding: 16px !important;
-            }
-            .header-padding {
-                padding: 12px 16px !important;
-            }
-            .vote-buttons {
-                flex-direction: row !important;
-            }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
         }
     </style>
 </head>
 <body class="bg-slate-50 text-slate-800 dark:bg-slate-900 dark:text-slate-100 min-h-screen flex flex-col antialiased">
 
     <!-- شريط الأدوات العلوي -->
-    <header class="no-print sticky top-0 z-50 backdrop-blur-md bg-white/80 dark:bg-slate-900/80 border-b border-slate-200 dark:border-slate-800">
-        <div class="max-w-4xl mx-auto px-3 sm:px-4 py-2 sm:py-3 flex items-center justify-between">
-            <div class="flex items-center space-x-2 space-x-reverse min-w-0">
-                <div class="w-8 h-8 sm:w-10 sm:h-10 rounded-xl bg-brand-500/10 flex items-center justify-center text-brand-600 dark:text-brand-400 shrink-0">
-                    <i class="fa-solid fa-file-signature text-sm sm:text-xl"></i>
+    <header class="no-print sticky top-0 z-40 backdrop-blur-md bg-white/80 dark:bg-slate-900/80 border-b border-slate-200 dark:border-slate-800">
+        <div class="max-w-4xl mx-auto px-4 py-3 flex items-center justify-between">
+            <div class="flex items-center space-x-3 space-x-reverse min-w-0">
+                <div class="w-10 h-10 rounded-xl bg-brand-500/10 flex items-center justify-center text-brand-600 dark:text-brand-400 shrink-0">
+                    <i class="fa-solid fa-file-signature text-xl"></i>
                 </div>
                 <div class="min-w-0">
-                    <h1 class="text-xs sm:text-sm md:text-base font-bold truncate">خطاب الاستقالة الرقمي</h1>
-                    <p class="text-[10px] sm:text-xs text-slate-500 dark:text-slate-400 truncate">عمرو مسعد الشجاع</p>
+                    <h1 class="text-sm sm:text-base font-extrabold truncate">منصة وثيقة الاستقالة الرقمية</h1>
+                    <p class="text-xs text-slate-500 dark:text-slate-400 truncate">توقيعات ومزامنة حية لقرية محبران</p>
                 </div>
             </div>
             
-            <div class="flex items-center gap-1 sm:gap-2 shrink-0">
-                <button onclick="toggleDarkMode()" class="p-2 sm:p-2.5 rounded-lg bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 text-slate-600 dark:text-slate-300 transition-colors btn-touch" title="تبديل المظهر">
-                    <i id="theme-icon" class="fa-solid fa-moon text-sm sm:text-base"></i>
+            <div class="flex items-center gap-2 shrink-0">
+                <button onclick="toggleDarkMode()" class="p-2.5 rounded-xl bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 text-slate-600 dark:text-slate-300 transition-colors" title="تبديل المظهر">
+                    <i id="theme-icon" class="fa-solid fa-moon text-base"></i>
                 </button>
-                <button onclick="copyLetterText()" class="p-2 sm:p-2.5 rounded-lg bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 text-slate-600 dark:text-slate-300 transition-colors btn-touch" title="نسخ النص">
-                    <i class="fa-regular fa-copy text-sm sm:text-base"></i>
+                <button onclick="copyLetterText()" class="p-2.5 rounded-xl bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 text-slate-600 dark:text-slate-300 transition-colors" title="نسخ النص كامل">
+                    <i class="fa-regular fa-copy text-base"></i>
                 </button>
-                <button onclick="window.print()" class="p-2 sm:p-2.5 rounded-lg bg-brand-600 hover:bg-brand-700 text-white transition-colors shadow-md shadow-brand-500/20 btn-touch" title="طباعة">
-                    <i class="fa-solid fa-print text-sm sm:text-base"></i>
+                <button onclick="window.print()" class="p-2.5 rounded-xl bg-brand-600 hover:bg-brand-700 text-white transition-colors shadow-lg shadow-brand-500/20" title="طباعة أو تصدير PDF">
+                    <i class="fa-solid fa-print text-base"></i>
                 </button>
             </div>
         </div>
     </header>
 
-    <main class="flex-grow max-w-4xl w-full mx-auto px-3 sm:px-4 py-4 sm:py-8 md:py-12">
+    <main class="flex-grow max-w-4xl w-full mx-auto px-4 py-6 md:py-10">
         
-        <!-- إشعار النجاح -->
-        <div id="toast" class="fixed bottom-5 left-1/2 -translate-x-1/2 bg-slate-900 text-white dark:bg-white dark:text-slate-900 px-4 sm:px-5 py-2.5 sm:py-3 rounded-xl shadow-2xl flex items-center gap-2 text-xs sm:text-sm font-medium transition-all duration-300 translate-y-20 opacity-0 pointer-events-none z-50 max-w-[90vw]">
-            <i class="fa-solid fa-circle-check text-brand-500"></i>
-            <span id="toast-message" class="truncate">تم النسخ بنجاح!</span>
+        <!-- إشعار عائم (Toast) -->
+        <div id="toast" class="fixed bottom-6 left-1/2 -translate-x-1/2 bg-slate-950 text-white dark:bg-white dark:text-slate-950 px-5 py-3.5 rounded-2xl shadow-2xl flex items-center gap-3 text-sm font-semibold transition-all duration-300 translate-y-20 opacity-0 pointer-events-none z-50 max-w-[90vw]">
+            <span id="toast-icon-container" class="text-brand-500">
+                <i class="fa-solid fa-circle-check"></i>
+            </span>
+            <span id="toast-message" class="truncate">تم تنفيذ العملية بنجاح!</span>
         </div>
 
-        <!-- حالة التخزين -->
-        <div class="no-print mb-4 sm:mb-6 p-3 sm:p-4 rounded-xl border border-blue-100 dark:border-blue-900/30 bg-blue-50/20 dark:bg-blue-950/10 flex items-center justify-between flex-wrap gap-2">
-            <div class="flex items-center gap-2">
-                <span class="relative flex h-2.5 w-2.5 shrink-0">
-                    <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>
-                    <span class="relative inline-flex rounded-full h-2.5 w-2.5 bg-green-500"></span>
-                </span>
-                <span class="text-[10px] sm:text-xs font-semibold text-slate-500 dark:text-slate-400">التخزين المحلي</span>
-            </div>
-            <button onclick="clearAllSignatures()" class="text-[10px] sm:text-xs text-red-500 hover:text-red-700 font-medium px-2 sm:px-3 py-1 rounded-lg bg-red-50 dark:bg-red-950/20 hover:bg-red-100 transition-colors btn-touch">
-                <i class="fa-regular fa-trash-can ml-1"></i> مسح الكل
-            </button>
-        </div>
-
-        <div id="letter-content" class="print-card bg-white dark:bg-slate-800 border border-slate-100 dark:border-slate-750 rounded-2xl shadow-xl p-4 sm:p-6 md:p-10 letter-padding">
-            
-            <!-- ترويسة الخطاب -->
-            <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3 sm:gap-4 border-b border-slate-100 dark:border-slate-750 pb-4 sm:pb-6 mb-6 sm:mb-8">
-                <div class="flex items-center gap-2 text-slate-400 dark:text-slate-500 text-[10px] sm:text-xs font-bold uppercase tracking-wider">
-                    <i class="fa-solid fa-file-invoice text-brand-500"></i>
-                    <span>مستند استقالة رسمي</span>
+        <!-- مودال الحوار المخصص لتأكيد الحذف (Custom Dialog Modal) -->
+        <div id="custom-modal" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/60 backdrop-blur-sm opacity-0 pointer-events-none transition-opacity duration-300">
+            <div class="bg-white dark:bg-slate-800 rounded-3xl p-6 max-w-sm w-full shadow-2xl border border-slate-100 dark:border-slate-700 transform scale-95 transition-transform duration-300" id="modal-card">
+                <div class="w-12 h-12 rounded-full bg-red-100 dark:bg-red-950/30 flex items-center justify-center text-red-600 dark:text-red-400 mx-auto mb-4">
+                    <i class="fa-solid fa-triangle-exclamation text-xl"></i>
                 </div>
-                <div class="text-slate-500 dark:text-slate-400 text-xs sm:text-sm font-medium flex items-center gap-1.5">
-                    <i class="fa-regular fa-calendar-days text-brand-500"></i>
-                    <span>التاريخ:</span>
-                    <span class="font-bold tracking-wider text-slate-800 dark:text-slate-200">23 / 06 / 2026</span>
+                <h3 class="text-lg font-bold text-slate-900 dark:text-white text-center mb-2">تأكيد الإجراء الهام</h3>
+                <p class="text-sm text-slate-500 dark:text-slate-400 text-center mb-6">هل أنت متأكد من رغبتك في حذف جميع التواقيع والاعتمادات؟ لا يمكن التراجع عن هذا القرار.</p>
+                <div class="flex gap-3">
+                    <button id="modal-confirm-btn" class="flex-1 py-3 bg-red-600 hover:bg-red-700 text-white rounded-xl text-sm font-bold transition-colors">نعم، امسح الكل</button>
+                    <button onclick="closeCustomModal()" class="flex-1 py-3 bg-slate-100 hover:bg-slate-200 dark:bg-slate-700 dark:hover:bg-slate-600 text-slate-700 dark:text-slate-300 rounded-xl text-sm font-bold transition-colors">إلغاء</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- لوحة حالة التخزين / الاتصال السحابي -->
+        <div class="no-print mb-6 p-4 rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-850 flex items-center justify-between flex-wrap gap-4 shadow-sm">
+            <div class="flex items-center gap-3">
+                <div class="relative flex h-3 w-3">
+                    <span id="sync-ping" class="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>
+                    <span id="sync-dot" class="relative inline-flex rounded-full h-3 w-3 bg-green-500"></span>
+                </div>
+                <div>
+                    <span id="sync-status-label" class="text-xs font-extrabold text-slate-800 dark:text-slate-200 block">جاري تحميل النظام...</span>
+                    <span id="sync-sub-label" class="text-[10px] text-slate-400 block">يرجى الانتظار لتحديث البيانات</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- بطاقة الخطاب الرسمية الفاخرة -->
+        <div id="letter-content" class="print-card print-border bg-white dark:bg-slate-800 border border-slate-100 dark:border-slate-750/70 rounded-3xl shadow-xl p-6 sm:p-10 md:p-12 relative overflow-hidden">
+            
+            <!-- علامة خلفية فنية (Watermark للطباعة الفاخرة) -->
+            <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 opacity-[0.02] dark:opacity-[0.03] pointer-events-none select-none text-center">
+                <i class="fa-solid fa-file-signature text-[24rem]"></i>
+            </div>
+
+            <!-- ترويسة الخطاب الرسمية -->
+            <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 border-b border-slate-100 dark:border-slate-700/60 pb-6 mb-8 relative z-10">
+                <div class="flex items-center gap-3">
+                    <div class="p-2.5 rounded-xl bg-emerald-500/10 text-brand-600 dark:text-brand-400">
+                        <i class="fa-solid fa-file-lines text-2xl"></i>
+                    </div>
+                    <div>
+                        <span class="text-[10px] font-extrabold text-brand-600 dark:text-brand-400 uppercase tracking-widest block mb-0.5">مستند رسمي معتمد</span>
+                        <h2 class="text-base font-black text-slate-800 dark:text-slate-100">صندوق الحالات الطارئة بمحبران</h2>
+                    </div>
+                </div>
+                <div class="text-slate-500 dark:text-slate-400 text-sm font-semibold bg-slate-50 dark:bg-slate-850 px-4 py-2 rounded-xl border border-slate-150 dark:border-slate-700/50 flex items-center gap-2">
+                    <i class="fa-regular fa-calendar-days text-brand-500 text-base"></i>
+                    <span>تاريخ المستند:</span>
+                    <span class="font-bold tracking-wide text-slate-950 dark:text-white">23 / 06 / 2026</span>
                 </div>
             </div>
 
             <!-- الجهة الموجه إليها الخطاب -->
-            <div class="mb-6 sm:mb-8 p-4 sm:p-6 rounded-2xl bg-gradient-to-r from-brand-50/50 to-emerald-50/10 dark:from-slate-850 dark:to-slate-800/50 border-r-4 border-brand-500 dark:border-brand-400 shadow-sm">
-                <h2 class="text-sm sm:text-base md:text-lg font-extrabold text-slate-900 dark:text-white leading-relaxed flex items-start gap-2 sm:gap-3">
-                    <i class="fa-solid fa-user-tie text-brand-500 text-base sm:text-lg md:text-xl mt-0.5 shrink-0"></i>
-                    <span class="text-sm sm:text-base">إلى الأخوة رئيس وأعضاء إدارة صندوق الحالات الطارئة – قرية محبران المحترمين</span>
+            <div class="mb-8 p-6 rounded-2xl bg-gradient-to-r from-brand-50/70 to-emerald-50/10 dark:from-slate-850 dark:to-slate-800/20 border-r-4 border-brand-500 dark:border-brand-400 shadow-sm relative z-10">
+                <h2 class="text-base sm:text-lg font-black text-slate-900 dark:text-white leading-relaxed flex items-start gap-3">
+                    <i class="fa-solid fa-user-tie text-brand-500 text-xl mt-0.5 shrink-0"></i>
+                    <span>إلى الإخوة رئيس وأعضاء إدارة صندوق الحالات الطارئة – قرية محبران المحترمين</span>
                 </h2>
             </div>
 
             <!-- موضوع الاستقالة -->
-            <div class="bg-slate-50 dark:bg-slate-850 border border-slate-150 dark:border-slate-700/60 rounded-xl p-3 sm:p-4 mb-6 sm:mb-8">
-                <div class="flex items-center gap-2 flex-wrap">
-                    <span class="text-[10px] sm:text-xs font-bold text-slate-400 dark:text-slate-500 uppercase tracking-widest">الموضوع:</span>
-                    <h3 class="text-sm sm:text-base md:text-lg font-bold text-brand-600 dark:text-brand-400">استقالة من المهام الفنية والتقنية</h3>
+            <div class="bg-slate-50 dark:bg-slate-850/60 border border-slate-150 dark:border-slate-700/50 rounded-xl px-5 py-3.5 mb-8 relative z-10">
+                <div class="flex items-center gap-3 flex-wrap">
+                    <span class="text-xs font-black text-slate-400 dark:text-slate-500 tracking-wider">الموضوع:</span>
+                    <h3 class="text-base sm:text-lg font-extrabold text-brand-600 dark:text-brand-400">استقالة رسمية من المهام الفنية والتقنية</h3>
                 </div>
             </div>
 
             <!-- التحية -->
-            <div class="mb-4 sm:mb-6">
-                <p class="text-sm sm:text-base font-bold text-slate-800 dark:text-slate-200">السلام عليكم ورحمة الله وبركاته،</p>
+            <div class="mb-6 relative z-10">
+                <p class="text-base font-extrabold text-slate-800 dark:text-slate-200">السلام عليكم ورحمة الله وبركاته،،</p>
             </div>
 
             <!-- متن الرسالة -->
-            <div class="space-y-4 sm:space-y-6 mb-6 sm:mb-10 text-justify leading-relaxed text-slate-700 dark:text-slate-300 text-sm sm:text-base">
-                <div class="p-3 sm:p-5 rounded-xl border border-slate-100 dark:border-slate-700/50 bg-white dark:bg-slate-800/50">
-                    <p>أتقدم إليكم بخالص الشكر والتقدير على الثقة التي منحتموني إياها طوال فترة عملي ضمن فريق صندوق الحالات الطارئة – قرية محبران، حيث تشرفت بخدمة الصندوق والمساهمة في تطوير أعماله التقنية والإعلامية.</p>
-                </div>
+            <div class="space-y-6 mb-10 text-justify leading-relaxed text-slate-700 dark:text-slate-300 text-sm sm:text-base relative z-10">
+                <p>أتقدم إليكم بخالص الشكر والامتنان وعظيم التقدير على الثقة الغالية التي أوليتُموني إياها طوال فترة عملي المتواضعة ضمن فريق صندوق الحالات الطارئة – قرية محبران، حيث شرفت وسعدت بخدمة الصندوق والمساهمة الفاعلة في تطوير وتنظيم أعماله الفنية والتقنية والإعلامية على النحو الذي يُرضي تطلعاتكم ويخدم أهدافه النبيلة.</p>
 
-                <div class="p-3 sm:p-5 rounded-xl border border-brand-100 dark:border-brand-900/30 bg-brand-50/20 dark:bg-brand-950/10">
-                    <div class="flex items-center gap-2 mb-2 sm:mb-3">
-                        <i class="fa-solid fa-laptop-code text-brand-500"></i>
-                        <span class="text-[10px] sm:text-xs font-bold text-brand-600 dark:text-brand-400 uppercase tracking-wider">المهام التي تم إنجازها</span>
+                <div class="p-5 rounded-2xl border border-brand-100/80 dark:border-brand-900/40 bg-brand-50/15 dark:bg-brand-950/10">
+                    <div class="flex items-center gap-2 mb-3">
+                        <i class="fa-solid fa-laptop-code text-brand-600 dark:text-brand-400"></i>
+                        <span class="text-xs font-black text-brand-700 dark:text-brand-400 tracking-wider">المهام المنجزة خلال فترة التكليف:</span>
                     </div>
-                    <p class="text-sm sm:text-base">وخلال فترة عملي، قمت بمهام التطوير التقني للأنظمة الإلكترونية، وتصميم الواجهات والمواد الإعلامية، وإدارة الجوانب الفنية المرتبطة بالموقع والأنظمة الإلكترونية، بالإضافة إلى إدخال البيانات وتقديم الدعم التقني اللازم لضمان استمرارية العمل وتطويره.</p>
+                    <p class="text-sm">لقد تشرفت بإنجاز مهام التأسيس والتطوير التقني لكافة الأنظمة الإلكترونية للصندوق، وتصميم الواجهات الإدارية والمواد الإعلامية، والإشراف الفني المباشر على الموقع والمنصات التابعة، إلى جانب إدارة وضمان سلامة مدخلات البيانات وتقديم الحلول الفورية لضمان ديمومة العمل الإداري بموثوقية عالية.</p>
                 </div>
 
-                <div class="p-3 sm:p-5 rounded-xl border border-red-100 dark:border-red-900/30 bg-red-50/10 dark:bg-red-950/5">
-                    <div class="flex items-center gap-2 mb-2 sm:mb-3">
+                <div class="p-5 rounded-2xl border border-red-100/80 dark:border-red-900/40 bg-red-50/10 dark:bg-red-950/5">
+                    <div class="flex items-center gap-2 mb-3">
                         <i class="fa-solid fa-circle-exclamation text-red-500"></i>
-                        <span class="text-[10px] sm:text-xs font-bold text-red-600 dark:text-red-400 uppercase tracking-wider">قرار الاستقالة الرسمي</span>
+                        <span class="text-xs font-black text-red-600 dark:text-red-400 tracking-wider">قرار الاستقالة الرسمي وسريان العمل:</span>
                     </div>
-                    <p class="text-sm sm:text-base">ونظراً لظروفي الخاصة والتزاماتي الحالية، فقد اتخذت قراراً بالتقدم باستقالتي من جميع المهام والمسؤوليات التي أقوم بها ضمن صندوق الحالات الطارئة – قرية محبران، على أن يبدأ سريان الاستقالة اعتباراً من تاريخ <span class="font-bold text-red-600 dark:text-red-400 underline decoration-dotted decoration-2 underline-offset-4">26 / 06 / 2026</span>، راجياً منكم التكرم بقبولها.</p>
+                    <p class="text-sm">ونظراً لظروفي الخاصة القاهرة والتزاماتي المهنية والأكاديمية الراهنة التي تحول دون تقديم الأداء الفني والزمني المأمول، فإنني أتقدم رسمياً باستقالتي من جميع المهام الفنية والمسؤوليات التقنية الموكلة إليّ ضمن صندوق الحالات الطارئة – قرية محبران، على أن تسري هذه الاستقالة رسمياً وتدخل حيز التنفيذ اعتباراً من تاريخ <span class="font-bold text-red-600 dark:text-red-400 underline decoration-dashed decoration-2 underline-offset-4">26 / 06 / 2026</span>، آملين تفهمكم وقبولها بتقدير متبادل.</p>
                 </div>
 
-                <div class="p-3 sm:p-5 rounded-xl border border-slate-100 dark:border-slate-700/50 bg-white dark:bg-slate-800/50">
-                    <p class="text-sm sm:text-base">وأود أن عبر عن اعتزازي بما قدمته خلال هذه الفترة، وبما تحقق من إنجازات تقنية وإدارية أسهمت في تطوير أعمال الصندوق وخدمة أهدافه الإنسانية. كما أتقدم بالشكر الجزيل لجميع أعضاء الإدارة على تعاونهم ودعمهم طوال فترة عملي.</p>
-                </div>
+                <p>إنني وإذ أُغادر موقعي الفني والتقني، لأعبر عن فخري واعتزازي البالغ بكل ما أثمرت عنه جهودنا المشتركة من ترسيخ للعمل الرقمي داخل الصندوق لخدمة الغايات الإنسانية السامية، متوجهاً بشكر خاص وصادق لكل زملائي وأعضاء الإدارة على تعاونهم الأخوي المثمر ودعمهم المستمر طيلة مسيرتنا التقنية.</p>
 
-                <div class="p-3 sm:p-5 rounded-xl border border-slate-100 dark:border-slate-700/50 bg-white dark:bg-slate-800/50">
-                    <p class="text-sm sm:text-base">وأتمنى لإدارة الصندوق وكافة أعضائه دوام التوفيق والنجاح والاستمرار في أداء رسالتهم الإنسانية النبيلة لخدمة أبناء قرية محبران.</p>
-                </div>
+                <p>سائلاً المولى العلي القدير لإدارة الصندوق الموقرة ولجميع منتسبيه دوام التميز، والتوفيق، والسداد، ومواصلة رسالتهم التنموية النبيلة لخدمة ورعاية أبناء قرية محبران الأوفياء.</p>
             </div>
 
-            <!-- الخاتمة -->
-            <div class="text-center mb-6 sm:mb-10 border-t border-slate-100 dark:border-slate-750 pt-4 sm:pt-6">
-                <p class="text-sm sm:text-base md:text-md font-bold text-slate-800 dark:text-slate-200">وتفضلوا بقبول فائق الاحترام والتقدير.</p>
+            <!-- الخاتمة والتحية الختامية -->
+            <div class="text-center mb-10 border-t border-slate-100 dark:border-slate-750 pt-6 relative z-10">
+                <p class="text-base font-extrabold text-slate-850 dark:text-slate-100">وتفضلوا بقبول فائق الاحترام والتقدير والمحبة،،</p>
             </div>
 
-            <!-- مقدم الاستقالة -->
-            <div class="flex flex-col sm:flex-row justify-between items-start sm:items-end gap-4 sm:gap-6 bg-slate-50 dark:bg-slate-850 p-4 sm:p-6 rounded-xl border border-slate-150 dark:border-slate-700">
-                <div>
-                    <span class="text-[10px] sm:text-xs font-bold text-slate-400 dark:text-slate-500 uppercase tracking-widest block mb-1 sm:mb-2">مقدم الاستقالة</span>
-                    <h4 class="text-base sm:text-lg font-bold text-slate-900 dark:text-white mb-0.5">عمرو مسعد الشجاع</h4>
-                    <p class="text-xs sm:text-sm text-brand-600 dark:text-brand-400 font-medium">المطور والمصمم التقني لصندوق الحالات الطارئة – قرية محبران</p>
+            <!-- توقيع مقدم الاستقالة الرسمي -->
+            <div class="flex flex-col sm:flex-row justify-between items-stretch sm:items-center gap-6 bg-slate-50 dark:bg-slate-850 p-6 rounded-2xl border border-slate-150 dark:border-slate-700/60 relative z-10">
+                <div class="flex-1">
+                    <span class="text-[10px] font-black text-slate-400 dark:text-slate-500 tracking-widest block mb-1">مقدم الاستقالة والطلب:</span>
+                    <h4 class="text-lg font-black text-slate-900 dark:text-white mb-0.5">عمرو مسعد الشجاع</h4>
+                    <p class="text-xs text-brand-600 dark:text-brand-400 font-bold">المطور والمصمم التقني لصندوق الحالات الطارئة بمحبران</p>
                 </div>
-                <div class="w-full sm:w-auto min-w-[150px] text-right sm:text-left border-t sm:border-t-0 sm:border-r border-slate-200 dark:border-slate-700 pt-3 sm:pt-0 sm:pr-6">
-                    <span class="text-[10px] sm:text-xs font-bold text-slate-400 dark:text-slate-500 uppercase tracking-widest block mb-2 sm:mb-3">التوقيع الشخصي</span>
-                    <div class="h-8 sm:h-10 flex items-end justify-start sm:justify-end text-slate-300 dark:text-slate-600 select-none">
-                        <span class="font-mono text-xs sm:text-sm tracking-widest">…………………………………………</span>
+                <div class="border-t sm:border-t-0 sm:border-r border-slate-200 dark:border-slate-700 pt-4 sm:pt-0 sm:pr-8 flex flex-col justify-center min-w-[200px]">
+                    <span class="text-[10px] font-black text-slate-400 dark:text-slate-500 tracking-widest block mb-2">التوقيع الرقمي الفني:</span>
+                    <div class="font-signature text-3xl text-brand-600 dark:text-brand-400 tracking-wider select-none transform rotate-[-3deg] px-2">
+                        Amr Mosaad Al-Shuja'a
                     </div>
                 </div>
             </div>
 
-            <!-- التواقيع -->
-            <div class="mt-6 sm:mt-10 border-t border-slate-150 dark:border-slate-750 pt-6 sm:pt-8">
-                <h3 class="text-sm sm:text-base md:text-md font-bold text-slate-800 dark:text-white mb-4 sm:mb-6 flex items-center gap-2 flex-wrap">
-                    <i class="fa-solid fa-file-signature text-brand-500"></i>
-                    <span>التواقيع والاعتمادات الرسمية</span>
-                    <span id="count-badge" class="text-xs bg-brand-100 text-brand-700 dark:bg-brand-900/30 dark:text-brand-300 px-2.5 py-0.5 rounded-full font-bold">0</span>
-                </h3>
-                <div id="signatures-grid" class="signature-grid grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
-                    <!-- سيتم عرض التواقيع هنا -->
+            <!-- لوحة التحكم بالتوقيع والإرسال (مرئية للشاشة فقط وتظهر الآن هنا قبل لوحة عرض التواقيع) -->
+            <div class="no-print mt-10 border-t border-slate-200 dark:border-slate-750 pt-8 relative z-10">
+                <div class="bg-slate-50 dark:bg-slate-850/60 border border-slate-150 dark:border-slate-700/50 rounded-2xl p-6 shadow-sm">
+                    <div class="flex items-center gap-2.5 mb-5 border-b border-slate-150 dark:border-slate-700/50 pb-3">
+                        <div class="w-8 h-8 rounded-lg bg-brand-500/10 flex items-center justify-center text-brand-500">
+                            <i class="fa-solid fa-signature"></i>
+                        </div>
+                        <div>
+                            <h3 class="text-base font-black text-slate-900 dark:text-white">اعتماد وتوقيع وثيقة الاستقالة</h3>
+                            <p class="text-xs text-slate-400 dark:text-slate-500">توقيعك يثبت موافقتك أو رفضك للطلب في السجل</p>
+                        </div>
+                    </div>
+                    
+                    <div class="space-y-4">
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                            <div>
+                                <label for="vote-member-name" class="block text-xs font-bold text-slate-500 dark:text-slate-400 mb-1.5">الاسم الكامل للعضو:</label>
+                                <input type="text" id="vote-member-name" placeholder="مثال: د. عبدالرحمن الصندوق" 
+                                       class="form-input" 
+                                       maxlength="50"
+                                       autocomplete="off">
+                            </div>
+                            <div>
+                                <label for="vote-member-job" class="block text-xs font-bold text-slate-500 dark:text-slate-400 mb-1.5">المنصب الإداري أو المهنة:</label>
+                                <input type="text" id="vote-member-job" placeholder="مثال: رئيس مجلس الإدارة" 
+                                       class="form-input"
+                                       maxlength="50"
+                                       autocomplete="off">
+                            </div>
+                        </div>
+
+                        <div>
+                            <label class="block text-xs font-bold text-slate-500 dark:text-slate-400 mb-2">تحديد قرار الإدارة:</label>
+                            <div class="grid grid-cols-2 gap-3">
+                                <button id="btn-approve" onclick="selectVoteDecision(true)" class="py-3 px-4 rounded-xl border-2 border-brand-500/40 bg-brand-500/10 text-brand-700 dark:text-brand-300 text-sm font-bold flex items-center justify-center gap-2.5 transition-all">
+                                    <i class="fa-regular fa-circle-check text-brand-500 text-lg"></i>
+                                    <span>موافق ومؤيد للمهندس</span>
+                                </button>
+                                <button id="btn-disapprove" onclick="selectVoteDecision(false)" class="py-3 px-4 rounded-xl border-2 border-slate-200 dark:border-slate-700 text-slate-500 dark:text-slate-400 text-sm font-bold flex items-center justify-center gap-2.5 transition-all">
+                                    <i class="fa-regular fa-circle-xmark text-lg"></i>
+                                    <span>غير موافق</span>
+                                </button>
+                            </div>
+                        </div>
+
+                        <button id="submit-btn" onclick="submitMemberVote()" class="w-full py-4 bg-brand-600 hover:bg-brand-700 text-white font-black rounded-xl text-sm sm:text-base transition-all shadow-lg shadow-brand-500/25 flex items-center justify-center gap-2 active:scale-[0.98]">
+                            <i class="fa-solid fa-pen-fancy"></i>
+                            <span id="submit-btn-text">تسجيل واعتماد التوقيع فوراً</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- قسم التواقيع والاعتمادات الرسمية الحية من الإدارة -->
+            <div class="mt-10 border-t border-slate-200 dark:border-slate-750 pt-8 relative z-10">
+                <div class="flex items-center justify-between flex-wrap gap-4 mb-6">
+                    <h3 class="text-base font-black text-slate-900 dark:text-white flex items-center gap-2.5">
+                        <i class="fa-solid fa-file-shield text-brand-500"></i>
+                        <span>الاعتمادات والتواقيع الرسمية لأعضاء الإدارة</span>
+                    </h3>
+                    <div class="flex items-center gap-2">
+                        <span class="text-xs font-bold text-slate-500">مجموع الموافقين:</span>
+                        <span id="count-badge" class="text-xs bg-brand-500 text-white font-black px-3 py-1 rounded-full shadow-sm">0</span>
+                    </div>
+                </div>
+                
+                <div id="signatures-grid" class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <!-- التواقيع الفردية يتم توليدها ديناميكياً هنا -->
                 </div>
             </div>
         </div>
-
-        <!-- لوحة التوقيع -->
-        <section class="no-print mt-4 sm:mt-6 space-y-4 sm:space-y-6">
-            <div class="bg-white dark:bg-slate-800 border border-slate-100 dark:border-slate-750 rounded-2xl p-4 sm:p-6 shadow-lg">
-                <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2 sm:gap-3 mb-4">
-                    <h3 class="text-sm sm:text-base md:text-md font-bold flex items-center gap-2">
-                        <i class="fa-solid fa-signature text-brand-500"></i>
-                        <span>توقيع واعتماد الأعضاء</span>
-                    </h3>
-                    <span class="text-[10px] sm:text-xs px-2.5 py-1 rounded bg-brand-50 text-brand-600 dark:bg-brand-500/10 dark:text-brand-400 font-medium">تخزين محلي</span>
-                </div>
-                
-                <div class="space-y-3 sm:space-y-4">
-                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
-                        <div>
-                            <label for="vote-member-name" class="block text-[10px] sm:text-xs font-bold text-slate-400 mb-1">الاسم الكامل للتوقيع:</label>
-                            <input type="text" id="vote-member-name" placeholder="اكتب اسمك الكامل..." 
-                                   class="form-input dark:border-slate-700" 
-                                   maxlength="50"
-                                   autocomplete="off"
-                                   inputmode="text">
-                        </div>
-                        <div>
-                            <label for="vote-member-job" class="block text-[10px] sm:text-xs font-bold text-slate-400 mb-1">المهنة / المنصب:</label>
-                            <input type="text" id="vote-member-job" placeholder="مثال: رئيس الإدارة..." 
-                                   class="form-input dark:border-slate-700"
-                                   maxlength="50"
-                                   autocomplete="off"
-                                   inputmode="text">
-                        </div>
-                    </div>
-
-                    <div>
-                        <label class="block text-[10px] sm:text-xs font-bold text-slate-400 mb-2">تحديد قرارك:</label>
-                        <div class="flex gap-3 vote-buttons">
-                            <button id="btn-approve" onclick="selectVoteDecision(true)" class="flex-1 py-2.5 sm:py-3 px-3 sm:px-4 rounded-xl border-2 border-brand-500/40 bg-brand-500/10 text-brand-700 dark:text-brand-300 text-xs sm:text-sm font-bold flex items-center justify-center gap-2 transition-all btn-touch">
-                                <i class="fa-regular fa-circle-check text-brand-500 text-base sm:text-lg"></i>
-                                <span>موافق</span>
-                            </button>
-                            <button id="btn-disapprove" onclick="selectVoteDecision(false)" class="flex-1 py-2.5 sm:py-3 px-3 sm:px-4 rounded-xl border-2 border-slate-200 dark:border-slate-700 text-slate-500 dark:text-slate-400 text-xs sm:text-sm font-bold flex items-center justify-center gap-2 transition-all btn-touch">
-                                <i class="fa-regular fa-circle-xmark text-base sm:text-lg"></i>
-                                <span>غير موافق</span>
-                            </button>
-                        </div>
-                    </div>
-
-                    <button onclick="submitMemberVote()" class="w-full py-3 sm:py-3.5 bg-brand-600 hover:bg-brand-700 text-white font-bold rounded-xl text-sm sm:text-base transition-all shadow-md shadow-brand-500/20 flex items-center justify-center gap-2 btn-touch active:scale-[0.98]">
-                        <i class="fa-solid fa-pen-fancy"></i>
-                        <span>أرسل واعتمد التوقيع</span>
-                    </button>
-                </div>
-            </div>
-        </section>
     </main>
 
-    <footer class="no-print bg-slate-100 dark:bg-slate-950 text-slate-500 dark:text-slate-400 text-[10px] sm:text-xs py-4 sm:py-6 border-t border-slate-200 dark:border-slate-900">
-        <div class="max-w-4xl mx-auto px-3 sm:px-4 flex flex-col sm:flex-row justify-between items-center gap-2 sm:gap-3">
-            <div class="text-center sm:text-right">
-                <span>✅ يعمل بالتخزين المحلي</span>
+    <!-- تذييل الصفحة -->
+    <footer class="no-print bg-slate-100 dark:bg-slate-950 text-slate-500 dark:text-slate-400 text-xs py-5 border-t border-slate-200 dark:border-slate-900 mt-10">
+        <div class="max-w-4xl mx-auto px-4 flex flex-col sm:flex-row justify-between items-center gap-3">
+            <div class="flex items-center gap-2">
+                <i class="fa-solid fa-shield-halved text-brand-500"></i>
+                <span id="footer-sync-mode">نظام المزامنة الذاتية الاحتياطي مفعّل</span>
             </div>
-            <div class="flex items-center gap-1">
-                <span>مطور بواسطة</span>
+            <div class="flex items-center gap-1.5">
+                <span>المنصة مطورة بالكامل بواسطة</span>
                 <span class="font-bold text-brand-600 dark:text-brand-400">عمرو مسعد الشجاع</span>
             </div>
         </div>
     </footer>
 
-    <script>
-        // ======== منع تكبير الحقول أثناء الكتابة على iOS ========
-        document.addEventListener('touchstart', function() {
-            // لا تفعل شيئاً، هذا فقط لتفعيل منع التكبير
-        }, { passive: true });
+    <!-- Firebase Scripts and Setup (Supports Cloud Sync with fallback to LocalStorage) -->
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
+        import { getAuth, signInAnonymously, signInWithCustomToken, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
+        import { getFirestore, collection, doc, addDoc, onSnapshot, query, deleteDoc, getDocs } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
 
-        // ======== إدارة المظهر ========
+        // ثوابت وتهيئة النظام والتخزين المزدوج
+        const STORAGE_KEY = 'resignation_signatures';
+        const appId = typeof __app_id !== 'undefined' ? __app_id : 'resignation-amr-shuja';
+        let db = null;
+        let auth = null;
+        let currentUser = null;
+        let isCloudMode = false;
+        let unsubscribeSignatures = null;
+
+        // تهيئة قواعد البيانات وقناة الاتصال
+        async function setupSystem() {
+            const statusLabel = document.getElementById('sync-status-label');
+            const subLabel = document.getElementById('sync-sub-label');
+            const ping = document.getElementById('sync-ping');
+            const dot = document.getElementById('sync-dot');
+            const footerMode = document.getElementById('footer-sync-mode');
+
+            try {
+                if (typeof __firebase_config !== 'undefined' && __firebase_config) {
+                    const firebaseConfig = JSON.parse(__firebase_config);
+                    const app = initializeApp(firebaseConfig);
+                    auth = getAuth(app);
+                    db = getFirestore(app);
+
+                    // المصادقة الآمنة قبل الاستعلامات (Rule 3)
+                    if (typeof __initial_auth_token !== 'undefined' && __initial_auth_token) {
+                        await signInWithCustomToken(auth, __initial_auth_token);
+                    } else {
+                        await signInAnonymously(auth);
+                    }
+
+                    onAuthStateChanged(auth, (user) => {
+                        if (user) {
+                            currentUser = user;
+                            isCloudMode = true;
+                            
+                            statusLabel.innerText = "متصل بالسحابة (مزامنة حية)";
+                            subLabel.innerText = "يتم الحفظ والتحديث في قاعدة البيانات لحظياً لجميع الأجهزة";
+                            ping.className = "animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75";
+                            dot.className = "relative inline-flex rounded-full h-3 w-3 bg-emerald-500";
+                            footerMode.innerHTML = `<i class="fa-solid fa-cloud text-emerald-500"></i> خوادم السحابة متصلة ونشطة`;
+                            
+                            // تشغيل مستمع السحابة (Rule 2)
+                            listenToCloudSignatures();
+                        } else {
+                            activateLocalStorageFallback();
+                        }
+                    });
+                } else {
+                    activateLocalStorageFallback();
+                }
+            } catch (error) {
+                console.error("Firebase connection failed, switching to Local Mode:", error);
+                activateLocalStorageFallback();
+            }
+        }
+
+        function activateLocalStorageFallback() {
+            isCloudMode = false;
+            const statusLabel = document.getElementById('sync-status-label');
+            const subLabel = document.getElementById('sync-sub-label');
+            const ping = document.getElementById('sync-ping');
+            const dot = document.getElementById('sync-dot');
+            const footerMode = document.getElementById('footer-sync-mode');
+
+            statusLabel.innerText = "وضع حفظ متصفحك محلياً";
+            subLabel.innerText = "يتم تخزين التواقيع داخل ذاكرة المتصفح الحالي لعدم توفر خادم سحابي";
+            ping.className = "absolute inline-flex h-full w-full rounded-full bg-amber-400 opacity-75";
+            dot.className = "relative inline-flex rounded-full h-3 w-3 bg-amber-500";
+            footerMode.innerHTML = `<i class="fa-solid fa-hdd text-amber-500"></i> التخزين المحلي الآمن نشط`;
+
+            renderLocalSignatures();
+        }
+
+        // الاستماع للتواقيع من السحابة في الوقت الفعلي (Rule 1 & Rule 2)
+        function listenToCloudSignatures() {
+            if (!db || !currentUser) return;
+            
+            // مسار الحفظ الآمن للبيانات العامة (Rule 1)
+            const publicCollection = collection(db, 'artifacts', appId, 'public', 'data', 'signatures');
+            
+            // مستمع السحابة النشط مع دالة إدارة الأخطاء (Rule 2)
+            unsubscribeSignatures = onSnapshot(publicCollection, (snapshot) => {
+                const signatures = [];
+                snapshot.forEach((doc) => {
+                    signatures.push({ id: doc.id, ...doc.data() });
+                });
+                
+                // الترتيب حسب وقت الإضافة محلياً بذاكرة الجافاسكربت لتفادي استعلامات الفلترة المعقدة (Rule 2)
+                signatures.sort((a, b) => a.timestamp - b.timestamp);
+                displaySignaturesUI(signatures);
+            }, (error) => {
+                console.error("Error reading signatures from cloud:", error);
+                showToast("⚠️ حدث خطأ أثناء جلب البيانات السحابية.", "error");
+            });
+        }
+
+        // عرض التواقيع المحلية
+        function renderLocalSignatures() {
+            const signatures = getLocalSignatures();
+            displaySignaturesUI(signatures);
+        }
+
+        function getLocalSignatures() {
+            try {
+                const data = localStorage.getItem(STORAGE_KEY);
+                return data ? JSON.parse(data) : [];
+            } catch {
+                return [];
+            }
+        }
+
+        // تشييد وبناء واجهة التواقيع المستلمة بالتنسيق الفاخر الجديد
+        function displaySignaturesUI(signatures) {
+            const grid = document.getElementById('signatures-grid');
+            const countBadge = document.getElementById('count-badge');
+            countBadge.textContent = signatures.length;
+
+            if (signatures.length === 0) {
+                grid.innerHTML = `
+                    <div class="col-span-full text-center py-10 text-slate-400 dark:text-slate-500 italic bg-slate-50 dark:bg-slate-850/40 rounded-2xl border border-dashed border-slate-200 dark:border-slate-700/80 text-sm">
+                        <i class="fa-solid fa-signature text-3xl mb-3 block text-slate-300 dark:text-slate-600"></i>
+                        <span>في انتظار توقيع واعتماد بقية أعضاء الإدارة الموقرين...</span>
+                    </div>
+                `;
+                return;
+            }
+
+            grid.innerHTML = signatures.map((vote, index) => {
+                const isApproved = vote.approved;
+                const cardBg = isApproved 
+                    ? 'from-emerald-50/40 to-brand-50/10 dark:from-emerald-950/20 dark:to-brand-950/10 border-emerald-500/25' 
+                    : 'from-red-50/40 to-rose-50/10 dark:from-red-950/20 dark:to-rose-950/10 border-red-500/25';
+                
+                const badgeClass = isApproved 
+                    ? 'bg-emerald-150 text-emerald-700 dark:bg-emerald-950/40 dark:text-emerald-400 border border-emerald-500/20' 
+                    : 'bg-red-150 text-red-700 dark:bg-red-950/40 dark:text-red-400 border border-red-500/20';
+                
+                const statusIcon = isApproved 
+                    ? '<i class="fa-solid fa-check-double text-emerald-500"></i>' 
+                    : '<i class="fa-solid fa-xmark text-red-500"></i>';
+                
+                const decisionText = isApproved ? 'موافق ومعتمد' : 'غير موافق';
+
+                return `
+                    <div class="vote-card p-5 rounded-2xl border bg-gradient-to-br ${cardBg} relative overflow-hidden flex flex-col justify-between">
+                        <div>
+                            <div class="flex justify-between items-start gap-2 mb-3">
+                                <span class="text-[9px] font-black tracking-widest text-slate-400 dark:text-slate-500 uppercase">مستند توقيع رقمي #${index + 1}</span>
+                                <span class="px-2 py-0.5 text-[10px] font-black rounded-md ${badgeClass} flex items-center gap-1.5 shrink-0">
+                                    ${statusIcon} ${decisionText}
+                                </span>
+                            </div>
+                            <div class="text-base font-extrabold text-slate-900 dark:text-white truncate">
+                                ${escapeHtml(vote.name)}
+                            </div>
+                            <div class="text-xs text-slate-500 dark:text-slate-400 font-bold truncate">
+                                ${escapeHtml(vote.job)}
+                            </div>
+                        </div>
+                        <div class="mt-4 pt-3 border-t border-slate-200/50 dark:border-slate-700/50 flex justify-between items-center text-[10px] text-slate-400 dark:text-slate-500">
+                            <span class="font-semibold">${vote.time}</span>
+                            <span class="flex items-center gap-1 text-brand-600 dark:text-brand-400 font-bold">
+                                <i class="fa-solid fa-shield-halved"></i> معتمد آمن
+                            </span>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        // دالة إرسال واعتماد التوقيع
+        window.submitMemberVote = async () => {
+            const nameInput = document.getElementById('vote-member-name');
+            const jobInput = document.getElementById('vote-member-job');
+            const submitBtn = document.getElementById('submit-btn');
+            const submitBtnText = document.getElementById('submit-btn-text');
+            const name = nameInput.value.trim();
+            const job = jobInput.value.trim();
+
+            nameInput.classList.remove('error');
+            jobInput.classList.remove('error');
+
+            if (!name) {
+                showToast("⚠️ فضلاً، اكتب اسمك الثلاثي للاعتماد الرسمي", "warning");
+                nameInput.classList.add('error');
+                nameInput.focus();
+                return;
+            }
+
+            if (!job) {
+                showToast("⚠️ يرجى تعبئة الحقل بالمنصب الإداري الحالي", "warning");
+                jobInput.classList.add('error');
+                jobInput.focus();
+                return;
+            }
+
+            // تفعيل حالة التحميل في زر الإرسال لمنع التكرار
+            submitBtn.disabled = true;
+            submitBtnText.innerHTML = `<span class="flex items-center justify-center gap-2"><span class="spinner"></span> جاري توثيق وإرسال توقيعك...</span>`;
+
+            try {
+                const now = new Date();
+                const timeStr = now.toLocaleDateString('ar-YE') + ' ' + 
+                               now.toLocaleTimeString('ar-YE', { hour: '2-digit', minute: '2-digit' });
+
+                const votePayload = {
+                    name: name,
+                    job: job,
+                    approved: selectedApproved,
+                    time: timeStr,
+                    timestamp: Date.now()
+                };
+
+                if (isCloudMode) {
+                    // السحابة: فحص التكرار وجلب التواقيع (Rule 1 & Rule 2)
+                    const signaturesRef = collection(db, 'artifacts', appId, 'public', 'data', 'signatures');
+                    const snapshot = await getDocs(signaturesRef);
+                    let isDuplicate = false;
+                    
+                    snapshot.forEach((doc) => {
+                        if (doc.data().name.toLowerCase() === name.toLowerCase()) {
+                            isDuplicate = true;
+                        }
+                    });
+
+                    if (isDuplicate) {
+                        showToast(`⚠️ هذا الاسم "${name}" مسجل بالتوقيع مسبقاً في السحابة`, "warning");
+                        nameInput.classList.add('error');
+                        nameInput.focus();
+                        resetSubmitButton();
+                        return;
+                    }
+
+                    // الحفظ الفعلي بالسحابة (Rule 1)
+                    await addDoc(signaturesRef, votePayload);
+                    showToast(`🎉 تم اعتماد توقيعك السحابي بنجاح يا ${name}`, "success");
+                } else {
+                    // التخزين المحلي الاحتياطي
+                    const signatures = getLocalSignatures();
+                    if (signatures.some(v => v.name.toLowerCase() === name.toLowerCase())) {
+                        showToast(`⚠️ هذا الاسم مضاف ومثبت من قبل`, "warning");
+                        nameInput.classList.add('error');
+                        nameInput.focus();
+                        resetSubmitButton();
+                        return;
+                    }
+
+                    signatures.push(votePayload);
+                    localStorage.setItem(STORAGE_KEY, JSON.stringify(signatures));
+                    renderLocalSignatures();
+                    showToast(`✅ تم حفظ توقيعك المحلي بنجاح يا ${name}`, "success");
+                }
+
+                // تفريغ المدخلات بعد النجاح
+                nameInput.value = '';
+                jobInput.value = '';
+                selectVoteDecision(true);
+
+            } catch (err) {
+                console.error("Signature processing failed:", err);
+                showToast("❌ واجهنا خطأ أثناء إتمام عملية التوقيع", "error");
+            } finally {
+                resetSubmitButton();
+            }
+
+            function resetSubmitButton() {
+                submitBtn.disabled = false;
+                submitBtnText.innerHTML = `تسجيل واعتماد التوقيع فوراً`;
+            }
+        };
+
+        // تفريغ وتهيئة كافة تواقيع الصندوق بنظام الحوار المخصص الجديد (Custom Modal)
+        window.triggerResetConfirm = () => {
+            openCustomModal(async () => {
+                const submitBtn = document.getElementById('submit-btn');
+                submitBtn.disabled = true;
+                
+                try {
+                    if (isCloudMode) {
+                        // حذف السحابة بالكامل (Rule 1)
+                        const signaturesRef = collection(db, 'artifacts', appId, 'public', 'data', 'signatures');
+                        const snapshot = await getDocs(signaturesRef);
+                        const deletePromises = [];
+                        
+                        snapshot.forEach((docSnap) => {
+                            deletePromises.push(deleteDoc(doc(db, 'artifacts', appId, 'public', 'data', 'signatures', docSnap.id)));
+                        });
+                        
+                        await Promise.all(deletePromises);
+                        showToast("🗑️ تم تفريغ ومسح السحابة كاملة بنجاح", "success");
+                    } else {
+                        localStorage.removeItem(STORAGE_KEY);
+                        renderLocalSignatures();
+                        showToast("🗑️ تم إخلاء كافة التواقيع المحلية وحذفها", "success");
+                    }
+                } catch (error) {
+                    console.error("Purge error:", error);
+                    showToast("❌ فشل حذف السجلات، يرجى المحاولة لاحقاً", "error");
+                } finally {
+                    submitBtn.disabled = false;
+                    closeCustomModal();
+                }
+            });
+        };
+
+        // بدء تشغيل النظام بالتحميل
+        document.addEventListener('DOMContentLoaded', () => {
+            setupSystem();
+        });
+    </script>
+
+    <script>
+        // ======== إدارة المظهر الداكن ========
         if (localStorage.getItem('color-theme') === 'dark' || (!('color-theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
             document.documentElement.classList.add('dark');
             document.getElementById('theme-icon').className = 'fa-solid fa-sun';
@@ -393,17 +735,14 @@
                 document.documentElement.classList.remove('dark');
                 localStorage.setItem('color-theme', 'light');
                 icon.className = 'fa-solid fa-moon';
-                // تحديث كلاس الحقول
-                document.querySelectorAll('.form-input').forEach(el => el.classList.remove('dark'));
             } else {
                 document.documentElement.classList.add('dark');
                 localStorage.setItem('color-theme', 'dark');
                 icon.className = 'fa-solid fa-sun';
-                document.querySelectorAll('.form-input').forEach(el => el.classList.add('dark'));
             }
         }
 
-        // ======== متغيرات التصويت ========
+        // ======== متغيرات التصويت واختيار القرارات ========
         let selectedApproved = true;
 
         window.selectVoteDecision = (approved) => {
@@ -412,28 +751,80 @@
             const btnDisapprove = document.getElementById('btn-disapprove');
 
             if (approved) {
-                btnApprove.className = "flex-1 py-2.5 sm:py-3 px-3 sm:px-4 rounded-xl border-2 border-brand-500/40 bg-brand-500/10 text-brand-700 dark:text-brand-300 text-xs sm:text-sm font-bold flex items-center justify-center gap-2 transition-all btn-touch";
-                btnDisapprove.className = "flex-1 py-2.5 sm:py-3 px-3 sm:px-4 rounded-xl border-2 border-slate-200 dark:border-slate-700 text-slate-500 dark:text-slate-400 text-xs sm:text-sm font-bold flex items-center justify-center gap-2 transition-all btn-touch";
+                btnApprove.className = "py-3 px-4 rounded-xl border-2 border-brand-500/40 bg-brand-500/10 text-brand-700 dark:text-brand-300 text-sm font-bold flex items-center justify-center gap-2.5 transition-all";
+                btnDisapprove.className = "py-3 px-4 rounded-xl border-2 border-slate-200 dark:border-slate-700 text-slate-500 dark:text-slate-400 text-sm font-bold flex items-center justify-center gap-2.5 transition-all";
             } else {
-                btnApprove.className = "flex-1 py-2.5 sm:py-3 px-3 sm:px-4 rounded-xl border-2 border-slate-200 dark:border-slate-700 text-slate-500 dark:text-slate-400 text-xs sm:text-sm font-bold flex items-center justify-center gap-2 transition-all btn-touch";
-                btnDisapprove.className = "flex-1 py-2.5 sm:py-3 px-3 sm:px-4 rounded-xl border-2 border-red-500/40 bg-red-500/10 text-red-700 dark:text-red-300 text-xs sm:text-sm font-bold flex items-center justify-center gap-2 transition-all btn-touch";
+                btnApprove.className = "py-3 px-4 rounded-xl border-2 border-slate-200 dark:border-slate-700 text-slate-500 dark:text-slate-400 text-sm font-bold flex items-center justify-center gap-2.5 transition-all";
+                btnDisapprove.className = "py-3 px-4 rounded-xl border-2 border-red-500/40 bg-red-500/10 text-red-700 dark:text-red-300 text-sm font-bold flex items-center justify-center gap-2.5 transition-all";
             }
         };
 
-        // ======== دالة عرض الرسائل ========
-        function showToast(message) {
+        // ======== تفعيل وإدارة النوافذ المنبثقة المخصصة (Custom Modal System) ========
+        let activeModalConfirmCallback = null;
+
+        function openCustomModal(onConfirmCallback) {
+            const modal = document.getElementById('custom-modal');
+            const card = document.getElementById('modal-card');
+            activeModalConfirmCallback = onConfirmCallback;
+            
+            modal.classList.remove('pointer-events-none', 'opacity-0');
+            modal.classList.add('opacity-100');
+            card.classList.remove('scale-95');
+            card.classList.add('scale-100');
+        }
+
+        function closeCustomModal() {
+            const modal = document.getElementById('custom-modal');
+            const card = document.getElementById('modal-card');
+            
+            modal.classList.add('opacity-0');
+            modal.classList.remove('opacity-100');
+            card.classList.remove('scale-100');
+            card.classList.add('scale-95');
+            
+            setTimeout(() => {
+                modal.classList.add('pointer-events-none');
+                activeModalConfirmCallback = null;
+            }, 300);
+        }
+
+        // تفعيل زر تأكيد المودال
+        document.getElementById('modal-confirm-btn').addEventListener('click', () => {
+            if (activeModalConfirmCallback) {
+                activeModalConfirmCallback();
+            }
+        });
+
+        // ======== دالة عرض رسائل التنبيه الفاخرة المحدثة ========
+        function showToast(message, type = "success") {
             const toast = document.getElementById('toast');
-            document.getElementById('toast-message').innerText = message;
+            const toastMessage = document.getElementById('toast-message');
+            const toastIconContainer = document.getElementById('toast-icon-container');
+            
+            toastMessage.innerText = message;
+            
+            // تخصيص الأيقونة والألوان بحسب نوع الإشعار
+            if (type === "success") {
+                toastIconContainer.className = "text-brand-500";
+                toastIconContainer.innerHTML = '<i class="fa-solid fa-circle-check text-xl"></i>';
+            } else if (type === "warning") {
+                toastIconContainer.className = "text-amber-500";
+                toastIconContainer.innerHTML = '<i class="fa-solid fa-triangle-exclamation text-xl"></i>';
+            } else if (type === "error") {
+                toastIconContainer.className = "text-red-500";
+                toastIconContainer.innerHTML = '<i class="fa-solid fa-circle-xmark text-xl"></i>';
+            }
+            
             toast.classList.remove('translate-y-20', 'opacity-0', 'pointer-events-none');
             toast.classList.add('translate-y-0', 'opacity-100');
             
             setTimeout(() => {
                 toast.classList.remove('translate-y-0', 'opacity-100');
                 toast.classList.add('translate-y-20', 'opacity-0', 'pointer-events-none');
-            }, 3000);
+            }, 4000);
         }
 
-        // ======== دالة تهذيب النص ========
+        // ======== دالة تنظيف تهذيب حماية المدخلات ========
         function escapeHtml(text) {
             return text
                 .replace(/&/g, "&amp;")
@@ -443,162 +834,13 @@
                 .replace(/'/g, "&#039;");
         }
 
-        // ======== تخزين وإدارة التواقيع في localStorage ========
-        const STORAGE_KEY = 'resignation_signatures';
-
-        function getSignatures() {
-            try {
-                const data = localStorage.getItem(STORAGE_KEY);
-                return data ? JSON.parse(data) : [];
-            } catch {
-                return [];
-            }
-        }
-
-        function saveSignatures(signatures) {
-            localStorage.setItem(STORAGE_KEY, JSON.stringify(signatures));
-            renderSignatures();
-        }
-
-        // ======== عرض التواقيع ========
-        function renderSignatures() {
-            const grid = document.getElementById('signatures-grid');
-            const countBadge = document.getElementById('count-badge');
-            const signatures = getSignatures();
-
-            countBadge.textContent = signatures.length;
-
-            if (signatures.length === 0) {
-                grid.innerHTML = `
-                    <div class="col-span-full text-center py-6 sm:py-8 text-slate-400 dark:text-slate-500 italic bg-slate-50 dark:bg-slate-850 rounded-xl border border-dashed border-slate-200 dark:border-slate-700 text-sm">
-                        📝 في انتظار توقيع الأعضاء...
-                    </div>
-                `;
-                return;
-            }
-
-            grid.innerHTML = signatures.map((vote, index) => {
-                const isApproved = vote.approved;
-                const cardBg = isApproved 
-                    ? 'from-emerald-50/50 to-brand-50/20 dark:from-emerald-950/20 dark:to-brand-950/10 border-emerald-500/30' 
-                    : 'from-red-50/50 to-rose-50/20 dark:from-red-950/20 dark:to-rose-950/10 border-red-500/30';
-                
-                const badgeClass = isApproved 
-                    ? 'bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border border-emerald-500/20' 
-                    : 'bg-red-500/10 text-red-600 dark:text-red-400 border border-red-500/20';
-                
-                const statusIcon = isApproved 
-                    ? '<i class="fa-solid fa-check-double text-emerald-500"></i>' 
-                    : '<i class="fa-solid fa-xmark text-red-500"></i>';
-                const decisionText = isApproved ? '✅ موافق' : '❌ غير موافق';
-
-                return `
-                    <div class="vote-card p-3 sm:p-5 rounded-2xl border bg-gradient-to-br ${cardBg} relative overflow-hidden transition-all hover:shadow-md flex flex-col justify-between">
-                        <div>
-                            <div class="flex justify-between items-start gap-2 mb-2 sm:mb-3 flex-wrap">
-                                <span class="text-[8px] sm:text-[10px] font-bold tracking-widest text-slate-400 uppercase">توقيع #${index + 1}</span>
-                                <span class="px-1.5 sm:px-2 py-0.5 text-[8px] sm:text-[10px] font-bold rounded-md ${badgeClass}">
-                                    ${statusIcon} ${decisionText}
-                                </span>
-                            </div>
-                            <div class="mb-0.5 text-sm sm:text-base font-extrabold text-slate-900 dark:text-white truncate">
-                                ${escapeHtml(vote.name)}
-                            </div>
-                            <div class="text-[10px] sm:text-xs text-slate-500 dark:text-slate-400 font-medium truncate">
-                                ${escapeHtml(vote.job)}
-                            </div>
-                        </div>
-                        <div class="mt-3 sm:mt-4 pt-2 sm:pt-3 border-t border-slate-200/50 dark:border-slate-700/50 flex justify-between items-center text-[8px] sm:text-[10px] text-slate-400">
-                            <span class="font-mono">${vote.time}</span>
-                            <span class="flex items-center gap-1 text-brand-600 dark:text-brand-400">
-                                <i class="fa-solid fa-shield-halved"></i> موثق
-                            </span>
-                        </div>
-                    </div>
-                `;
-            }).join('');
-        }
-
-        // ======== إرسال التوقيع ========
-        window.submitMemberVote = () => {
-            const nameInput = document.getElementById('vote-member-name');
-            const jobInput = document.getElementById('vote-member-job');
-            const name = nameInput.value.trim();
-            const job = jobInput.value.trim();
-
-            // إزالة الأخطاء السابقة
-            nameInput.classList.remove('error');
-            jobInput.classList.remove('error');
-
-            // التحقق من الحقول
-            if (!name) {
-                showToast("⚠️ يرجى إدخال اسمك الكريم");
-                nameInput.classList.add('error');
-                nameInput.focus();
-                return;
-            }
-
-            if (!job) {
-                showToast("⚠️ يرجى تحديد المهنة أو المنصب");
-                jobInput.classList.add('error');
-                jobInput.focus();
-                return;
-            }
-
-            // جلب التواقيع الحالية
-            const signatures = getSignatures();
-
-            // التحقق من عدم تكرار الاسم
-            if (signatures.some(v => v.name.toLowerCase() === name.toLowerCase())) {
-                showToast(`⚠️ الاسم "${name}" مسجل مسبقاً`);
-                nameInput.classList.add('error');
-                nameInput.focus();
-                return;
-            }
-
-            // إنشاء توقيع جديد
-            const now = new Date();
-            const timeStr = now.toLocaleDateString('ar-YE') + ' ' + 
-                           now.toLocaleTimeString('ar-YE', { hour: '2-digit', minute: '2-digit' });
-
-            const newVote = {
-                name: name,
-                job: job,
-                approved: selectedApproved,
-                time: timeStr
-            };
-
-            // حفظ التوقيع
-            signatures.push(newVote);
-            saveSignatures(signatures);
-
-            // عرض رسالة نجاح
-            showToast(`✅ تم اعتماد توقيع "${name}" بنجاح`);
-
-            // تفريغ الحقول
-            nameInput.value = '';
-            jobInput.value = '';
-
-            // إعادة ضبط أزرار القرار
-            selectVoteDecision(true);
-        };
-
-        // ======== مسح جميع التواقيع ========
-        window.clearAllSignatures = () => {
-            if (confirm('⚠️ هل أنت متأكد من رغبتك في مسح جميع التواقيع؟')) {
-                localStorage.removeItem(STORAGE_KEY);
-                renderSignatures();
-                showToast('🗑️ تم مسح جميع التواقيع');
-            }
-        };
-
-        // ======== نسخ النص ========
+        // ======== دالة نسخ النص بالكامل ========
         window.copyLetterText = () => {
             const letterText = `التاريخ: 23 / 06 / 2026
 
 إلى الأخوة رئيس وأعضاء إدارة صندوق الحالات الطارئة – قرية محبران المحترمين
 
-الموضوع: استقالة من المهام الفنية والتقنية
+الموضوع: استقالة رسمية من المهام الفنية والتقنية
 
 السلام عليكم ورحمة الله وبركاته،
 
@@ -618,61 +860,24 @@
 
 عمرو مسعد الشجاع
 
-المطور والمصمم التقني لصندوق الحالات الطارئة – قرية محبران
+المطور والمصمم التقني لصندوق الحالات الطارئة – قرية محبران`;
 
-التوقيع: ……………………`;
-
-            if (navigator.clipboard && navigator.clipboard.writeText) {
-                navigator.clipboard.writeText(letterText).then(() => {
-                    showToast("✅ تم نسخ النص بنجاح");
-                }).catch(() => {
-                    fallbackCopy(letterText);
-                });
-            } else {
-                fallbackCopy(letterText);
-            }
-        };
-
-        function fallbackCopy(text) {
+            // النسخ المتطور الآمن المناسب للإطارات (Iframe execution safe code)
             const textarea = document.createElement("textarea");
-            textarea.value = text;
+            textarea.value = letterText;
             textarea.style.position = "fixed";
-            textarea.style.top = "-9999px";
-            textarea.style.left = "-9999px";
-            textarea.style.width = "1px";
-            textarea.style.height = "1px";
+            textarea.style.opacity = "0";
             document.body.appendChild(textarea);
             textarea.select();
             try {
                 document.execCommand('copy');
-                showToast("✅ تم نسخ النص بنجاح");
+                showToast("📋 تم نسخ نص وثيقة الاستقالة بالكامل في الحافظة", "success");
             } catch (err) {
-                showToast("❌ فشل النسخ، حاول يدوياً");
+                showToast("❌ عذراً، فشل نسخ الوثيقة التعبيرية", "error");
             }
             document.body.removeChild(textarea);
-        }
-
-        // ======== التحميل الأولي ========
-        document.addEventListener('DOMContentLoaded', () => {
-            renderSignatures();
-            selectVoteDecision(true);
-            
-            // تطبيق المظهر الداكن على الحقول
-            if (document.documentElement.classList.contains('dark')) {
-                document.querySelectorAll('.form-input').forEach(el => el.classList.add('dark'));
-            }
-        });
-
-        // ======== منع تكبير الحقول على iOS ========
-        document.addEventListener('focusin', function(e) {
-            if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA' || e.target.tagName === 'SELECT') {
-                setTimeout(function() {
-                    if (window.scrollY > 0) {
-                        window.scrollTo(0, Math.max(0, window.scrollY - 50));
-                    }
-                }, 100);
-            }
-        }, { passive: true });
+        };
     </script>
 </body>
 </html>
+
