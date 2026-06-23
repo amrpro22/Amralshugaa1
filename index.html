@@ -486,6 +486,14 @@
         const footerMode = document.getElementById('footer-sync-mode');
         const offlineOverlay = document.getElementById('offline-overlay');
 
+        // ======== دالة مساعدة لإنشاء مهلة انتظار (Timeout) لعمليات السحابة ========
+        const withTimeout = (promise, ms = 5000) => {
+            return Promise.race([
+                promise,
+                new Promise((_, reject) => setTimeout(() => reject(new Error("FirebaseTimeout")), ms))
+            ]);
+        };
+
         // ======== تهيئة Firebase ومصادقة المستخدم ========
         async function initFirebase() {
             try {
@@ -493,20 +501,36 @@
                 auth = getAuth(app);
                 db = getDatabase(app);
 
-                // تسجيل الدخول المجهول كخطوة أولى وأساسية
-                await signInAnonymously(auth);
-
-                onAuthStateChanged(auth, (user) => {
-                    if (user) {
+                // الاستماع المباشر لحالة الاتصال الحقيقية لقاعدة البيانات
+                const connectedRef = ref(db, ".info/connected");
+                onValue(connectedRef, (snap) => {
+                    if (snap.val() === true) {
                         isConnected = true;
                         offlineOverlay.classList.remove('active');
-                        
                         statusLabel.innerText = "✅ متصل بالسحابة";
                         subLabel.innerText = "مزامنة فورية مع قاعدة البيانات";
                         ping.className = "animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75";
                         dot.className = "relative inline-flex rounded-full h-3 w-3 bg-emerald-500";
                         footerMode.innerHTML = `<i class="fa-solid fa-cloud text-emerald-500"></i> ✅ متصل بالسحابة - مزامنة فورية`;
-                        
+                    } else {
+                        // إظهار حالة جاري الاتصال عند انقطاع الشبكة المؤقت
+                        statusLabel.innerText = "⚡ جاري الاتصال...";
+                        subLabel.innerText = "محاولة الاتصال بقاعدة البيانات";
+                        ping.className = "absolute inline-flex h-full w-full rounded-full bg-amber-400";
+                        dot.className = "relative inline-flex rounded-full h-3 w-3 bg-amber-500";
+                    }
+                });
+
+                // تسجيل الدخول المجهول كخطوة أولى وأساسية للكتابة
+                try {
+                    await signInAnonymously(auth);
+                } catch (authError) {
+                    console.error("Authentication Error:", authError);
+                    showToast("⚠️ يرجى تفعيل الـ (Anonymous Sign-In) في لوحة تحكم Firebase لمزامنة التواقيع", "error");
+                }
+
+                onAuthStateChanged(auth, (user) => {
+                    if (user) {
                         listenToCloudSignatures();
                     } else {
                         handleDisconnect();
@@ -532,23 +556,21 @@
 
         // ======== الاستماع للتواقيع ========
         function listenToCloudSignatures() {
-            if (!db || !auth.currentUser) return;
+            if (!db) return;
             
-            // تحديد مسار التواقيع المتوافق مع قاعدة RTDB: amr4admin/voting_submissions
             const signaturesRef = ref(db, 'amr4admin/voting_submissions');
             
             if (unsubscribeSignatures) {
                 unsubscribeSignatures();
             }
             
-            // قراءة البيانات والفرز المباشر في الذاكرة لتفادي مشاكل الفهرسة (indexOn) في قواعد البيانات السحابية
             unsubscribeSignatures = onValue(signaturesRef, (snapshot) => {
                 const signatures = [];
                 snapshot.forEach((childSnapshot) => {
                     signatures.push({ id: childSnapshot.key, ...childSnapshot.val() });
                 });
                 
-                // فرز التواقيع تصاعدياً بناءً على الوقت (timestamp) في جهة العميل (Client-side Sorting)
+                // فرز التواقيع تصاعدياً بناءً على الوقت (timestamp)
                 signatures.sort((a, b) => (a.timestamp || 0) - (b.timestamp || 0));
                 
                 displaySignaturesUI(signatures);
@@ -628,7 +650,7 @@
             nameInput.classList.remove('error');
             jobInput.classList.remove('error');
 
-            if (!auth.currentUser) {
+            if (!auth || !auth.currentUser) {
                 showToast("⚠️ الرجاء الانتظار حتى يكتمل الاتصال بالسحابة", "warning");
                 return;
             }
@@ -647,7 +669,7 @@
                 return;
             }
 
-            // تعطيل الزر وتغيير النص
+            // تعطيل الزر وتغيير النص مع ميزة منع التعليق الدائم
             submitBtn.disabled = true;
             submitBtnText.innerHTML = `<span class="flex items-center justify-center gap-2"><span class="spinner"></span> جاري الحفظ...</span>`;
 
@@ -666,10 +688,10 @@
 
                 const signaturesRef = ref(db, 'amr4admin/voting_submissions');
                 
-                // التحقق من عدم التكرار
-                const snapshot = await get(signaturesRef);
-                let isDuplicate = false;
+                // قراءة البيانات من السحابة مع مهلة حماية لـ 5 ثواني لمنع التعليق
+                const snapshot = await withTimeout(get(signaturesRef), 5000);
                 
+                let isDuplicate = false;
                 if (snapshot.exists()) {
                     snapshot.forEach((childSnapshot) => {
                         if (childSnapshot.val().name?.toLowerCase() === name.toLowerCase()) {
@@ -687,9 +709,9 @@
                     return;
                 }
 
-                // حفظ في Firebase Realtime Database
+                // حفظ التوقيع مع مهلة حماية لـ 5 ثواني لمنع التعليق
                 const newVoteRef = push(signaturesRef);
-                await set(newVoteRef, votePayload);
+                await withTimeout(set(newVoteRef, votePayload), 5000);
                 
                 showToast(`🎉 تم اعتماد توقيع "${name}" بنجاح`, "success");
 
@@ -700,9 +722,13 @@
 
             } catch (err) {
                 console.error("Signature failed:", err);
-                showToast("❌ فشل حفظ التوقيع في السحابة", "error");
+                if (err.message === "FirebaseTimeout") {
+                    showToast("❌ انتهت مهلة الاتصال بالخادم. يرجى التحقق من تفعيل Anonymous Sign-In في Firebase", "error");
+                } else {
+                    showToast("❌ فشل حفظ التوقيع في السحابة. تحقق من الصلاحيات", "error");
+                }
             } finally {
-                // إعادة تفعيل الزر لضمان عدم تعليق الواجهة
+                // إعادة تفعيل الزر في جميع الأحوال لضمان عدم تعليق الواجهة
                 submitBtn.disabled = false;
                 submitBtnText.innerHTML = `تسجيل واعتماد التوقيع`;
             }
