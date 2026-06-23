@@ -344,7 +344,7 @@
 
                 <p>إنني وإذ أُغادر موقعي الفني والتقني، لأعبر عن فخري واعتزازي البالغ بكل ما أثمرت عنه جهودنا المشتركة من ترسيخ للعمل الرقمي داخل الصندوق لخدمة الغايات الإنسانية السامية، متوجهاً بشكر خاص وصادق لكل زملائي وأعضاء الإدارة على تعاونهم الأخوي المثمر ودعمهم المستمر طيلة مسيرتنا التقنية.</p>
 
-                <p>سائلاً المولى العلي القدير لإدارة الصندوق الموقرة ولجميع منتسبيه دوام التميز، والتوفيق، والسداد، ومواصلة رسالتهم التنموية النبيلة لخدمة ورعاية أبناء قرية محبران الأوفياء.</p>
+                <p>سائلاً المولى العلي القدير لإدارة الصندوق الموقرة ولجميع منتسبيه دوام التميز، والتوفيق, والسداد، ومواصلة رسالتهم التنموية النبيلة لخدمة ورعاية أبناء قرية محبران الأوفياء.</p>
             </div>
 
             <!-- الخاتمة -->
@@ -458,7 +458,7 @@
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
         import { getAuth, signInAnonymously, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
-        import { getFirestore, collection, addDoc, onSnapshot, query, getDocs, orderBy } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+        import { getDatabase, ref, push, set, onValue, get } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-database.js";
 
         // ======== إعدادات Firebase ========
         const firebaseConfig = {
@@ -467,14 +467,16 @@
             projectId: "amr4ever-6efa4",
             storageBucket: "amr4ever-6efa4.firebasestorage.app",
             messagingSenderId: "171559645299",
-            appId: "1:171559645299:web:d9ad8481f49e2b921e3a06"
+            appId: "1:171559645299:web:d9ad8481f49e2b921e3a06",
+            databaseURL: "https://amr4ever-6efa4-default-rtdb.firebaseio.com"
         };
 
-        const appId = 'amr4ever-6efa4';
+        // ======== متغيرات التصويت والاتصال ========
         let db = null;
         let auth = null;
         let unsubscribeSignatures = null;
         let isConnected = false;
+        let selectedApproved = true;
 
         // ======== عناصر التحكم ========
         const statusLabel = document.getElementById('sync-status-label');
@@ -489,7 +491,7 @@
             try {
                 const app = initializeApp(firebaseConfig);
                 auth = getAuth(app);
-                db = getFirestore(app);
+                db = getDatabase(app);
 
                 // تسجيل الدخول المجهول كخطوة أولى وأساسية
                 await signInAnonymously(auth);
@@ -532,18 +534,22 @@
         function listenToCloudSignatures() {
             if (!db || !auth.currentUser) return;
             
-            const publicCollection = collection(db, 'artifacts', appId, 'public', 'data', 'signatures');
-            const q = query(publicCollection, orderBy('timestamp', 'asc'));
+            // تحديد مسار التواقيع المتوافق مع قاعدة RTDB: amr4admin/voting_submissions
+            const signaturesRef = ref(db, 'amr4admin/voting_submissions');
             
             if (unsubscribeSignatures) {
                 unsubscribeSignatures();
             }
             
-            unsubscribeSignatures = onSnapshot(q, (snapshot) => {
+            // قراءة البيانات والفرز المباشر في الذاكرة لتفادي مشاكل الفهرسة (indexOn) في قواعد البيانات السحابية
+            unsubscribeSignatures = onValue(signaturesRef, (snapshot) => {
                 const signatures = [];
-                snapshot.forEach((doc) => {
-                    signatures.push({ id: doc.id, ...doc.data() });
+                snapshot.forEach((childSnapshot) => {
+                    signatures.push({ id: childSnapshot.key, ...childSnapshot.val() });
                 });
+                
+                // فرز التواقيع تصاعدياً بناءً على الوقت (timestamp) في جهة العميل (Client-side Sorting)
+                signatures.sort((a, b) => (a.timestamp || 0) - (b.timestamp || 0));
                 
                 displaySignaturesUI(signatures);
             }, (error) => {
@@ -658,16 +664,19 @@
                     timestamp: Date.now()
                 };
 
-                const signaturesRef = collection(db, 'artifacts', appId, 'public', 'data', 'signatures');
+                const signaturesRef = ref(db, 'amr4admin/voting_submissions');
                 
                 // التحقق من عدم التكرار
-                const snapshot = await getDocs(signaturesRef);
+                const snapshot = await get(signaturesRef);
                 let isDuplicate = false;
-                snapshot.forEach((doc) => {
-                    if (doc.data().name?.toLowerCase() === name.toLowerCase()) {
-                        isDuplicate = true;
-                    }
-                });
+                
+                if (snapshot.exists()) {
+                    snapshot.forEach((childSnapshot) => {
+                        if (childSnapshot.val().name?.toLowerCase() === name.toLowerCase()) {
+                            isDuplicate = true;
+                        }
+                    });
+                }
 
                 if (isDuplicate) {
                     showToast(`⚠️ "${name}" مسجل مسبقاً في السحابة`, "warning");
@@ -678,8 +687,10 @@
                     return;
                 }
 
-                // حفظ في Firebase
-                await addDoc(signaturesRef, votePayload);
+                // حفظ في Firebase Realtime Database
+                const newVoteRef = push(signaturesRef);
+                await set(newVoteRef, votePayload);
+                
                 showToast(`🎉 تم اعتماد توقيع "${name}" بنجاح`, "success");
 
                 // تفريغ الحقول
@@ -691,7 +702,7 @@
                 console.error("Signature failed:", err);
                 showToast("❌ فشل حفظ التوقيع في السحابة", "error");
             } finally {
-                // إعادة تفعيل الزر
+                // إعادة تفعيل الزر لضمان عدم تعليق الواجهة
                 submitBtn.disabled = false;
                 submitBtnText.innerHTML = `تسجيل واعتماد التوقيع`;
             }
@@ -756,9 +767,7 @@
             }
         }
 
-        // ======== متغيرات التصويت ========
-        let selectedApproved = true;
-
+        // ======== دوال تحديد القرار ========
         window.selectVoteDecision = (approved) => {
             selectedApproved = approved;
             const btnApprove = document.getElementById('btn-approve');
