@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
@@ -23,7 +22,6 @@
             theme: {
                 extend: {
                     fontFamily: {
-                        // إعداد خط آبل برو كخط أساسي افتراضي للنظام والأجهزة مع بدائل ذكية للأنظمة الأخرى
                         sans: [
                             'SF Pro', 
                             'SF Pro Arabic', 
@@ -60,13 +58,11 @@
         }
         
         body {
-            /* تطبيق خطوط آبل برو بالتنسيق المباشر لضمان التوافقية والتغطية الكاملة */
             font-family: 'SF Pro', 'SF Pro Arabic', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
             transition: background-color 0.3s ease, color 0.3s ease;
             overflow-x: hidden;
         }
 
-        /* تنسيق مخصص للطباعة لتبدو كوثيقة رسمية فاخرة */
         @media print {
             .no-print {
                 display: none !important;
@@ -99,7 +95,6 @@
             box-shadow: 0 10px 20px -10px rgba(34, 197, 94, 0.3);
         }
 
-        /* تحسينات الإدخال على الهواتف والأجهزة الذكية */
         input, textarea, select {
             font-size: 16px !important;
             -webkit-appearance: none;
@@ -141,7 +136,6 @@
             box-shadow: 0 0 0 4px rgba(239, 68, 68, 0.15) !important;
         }
 
-        /* تخصيص مؤشر التحميل */
         .spinner {
             border: 3px solid rgba(255,255,255,0.3);
             border-radius: 50%;
@@ -196,7 +190,7 @@
             <span id="toast-message" class="truncate">تم تنفيذ العملية بنجاح!</span>
         </div>
 
-        <!-- مودال الحوار المخصص لتأكيد الحذف (Custom Dialog Modal) -->
+        <!-- مودال الحوار المخصص لتأكيد الحذف -->
         <div id="custom-modal" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/60 backdrop-blur-sm opacity-0 pointer-events-none transition-opacity duration-300">
             <div class="bg-white dark:bg-slate-800 rounded-3xl p-6 max-w-sm w-full shadow-2xl border border-slate-100 dark:border-slate-700 transform scale-95 transition-transform duration-300" id="modal-card">
                 <div class="w-12 h-12 rounded-full bg-red-100 dark:bg-red-950/30 flex items-center justify-center text-red-600 dark:text-red-400 mx-auto mb-4">
@@ -225,15 +219,15 @@
             </div>
         </div>
 
-        <!-- بطاقة الخطاب الرسمية الفاخرة -->
+        <!-- بطاقة الخطاب الرسمية -->
         <div id="letter-content" class="print-card print-border bg-white dark:bg-slate-800 border border-slate-100 dark:border-slate-750/70 rounded-3xl shadow-xl p-6 sm:p-10 md:p-12 relative overflow-hidden">
             
-            <!-- علامة خلفية فنية (Watermark للطباعة الفاخرة) -->
+            <!-- علامة خلفية فنية -->
             <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 opacity-[0.02] dark:opacity-[0.03] pointer-events-none select-none text-center">
                 <i class="fa-solid fa-file-signature text-[24rem]"></i>
             </div>
 
-            <!-- ترويسة الخطاب الرسمية -->
+            <!-- ترويسة الخطاب -->
             <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 border-b border-slate-100 dark:border-slate-700/60 pb-6 mb-8 relative z-10">
                 <div class="flex items-center gap-3">
                     <div class="p-2.5 rounded-xl bg-emerald-500/10 text-brand-600 dark:text-brand-400">
@@ -297,12 +291,12 @@
                 <p>سائلاً المولى العلي القدير لإدارة الصندوق الموقرة ولجميع منتسبيه دوام التميز، والتوفيق، والسداد، ومواصلة رسالتهم التنموية النبيلة لخدمة ورعاية أبناء قرية محبران الأوفياء.</p>
             </div>
 
-            <!-- الخاتمة والتحية الختامية -->
+            <!-- الخاتمة -->
             <div class="text-center mb-10 border-t border-slate-100 dark:border-slate-750 pt-6 relative z-10">
                 <p class="text-base font-extrabold text-slate-850 dark:text-slate-100">وتفضلوا بقبول فائق الاحترام والتقدير والمحبة،،</p>
             </div>
 
-            <!-- توقيع مقدم الاستقالة الرسمي -->
+            <!-- توقيع مقدم الاستقالة -->
             <div class="flex flex-col sm:flex-row justify-between items-stretch sm:items-center gap-6 bg-slate-50 dark:bg-slate-850 p-6 rounded-2xl border border-slate-150 dark:border-slate-700/60 relative z-10">
                 <div class="flex-1">
                     <span class="text-[10px] font-black text-slate-400 dark:text-slate-500 tracking-widest block mb-1">مقدم الاستقالة والطلب:</span>
@@ -317,7 +311,7 @@
                 </div>
             </div>
 
-            <!-- لوحة التحكم بالتوقيع والإرسال (مرئية للشاشة فقط وتظهر الآن هنا قبل لوحة عرض التواقيع) -->
+            <!-- لوحة التحكم بالتوقيع -->
             <div class="no-print mt-10 border-t border-slate-200 dark:border-slate-750 pt-8 relative z-10">
                 <div class="bg-slate-50 dark:bg-slate-850/60 border border-slate-150 dark:border-slate-700/50 rounded-2xl p-6 shadow-sm">
                     <div class="flex items-center gap-2.5 mb-5 border-b border-slate-150 dark:border-slate-700/50 pb-3">
@@ -370,7 +364,7 @@
                 </div>
             </div>
 
-            <!-- قسم التواقيع والاعتمادات الرسمية الحية من الإدارة -->
+            <!-- قسم التواقيع -->
             <div class="mt-10 border-t border-slate-200 dark:border-slate-750 pt-8 relative z-10">
                 <div class="flex items-center justify-between flex-wrap gap-4 mb-6">
                     <h3 class="text-base font-black text-slate-900 dark:text-white flex items-center gap-2.5">
@@ -384,7 +378,7 @@
                 </div>
                 
                 <div id="signatures-grid" class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <!-- التواقيع الفردية يتم توليدها ديناميكياً هنا -->
+                    <!-- التواقيع يتم توليدها ديناميكياً -->
                 </div>
             </div>
         </div>
@@ -412,7 +406,7 @@
 
         // ثوابت وتهيئة النظام والتخزين المزدوج
         const STORAGE_KEY = 'resignation_signatures';
-        const appId = typeof __app_id !== 'undefined' ? __app_id : 'resignation-amr-shuja';
+        const appId = 'amr4ever-6efa4';
         let db = null;
         let auth = null;
         let currentUser = null;
@@ -428,39 +422,40 @@
             const footerMode = document.getElementById('footer-sync-mode');
 
             try {
-                if (typeof __firebase_config !== 'undefined' && __firebase_config) {
-                    const firebaseConfig = JSON.parse(__firebase_config);
-                    const app = initializeApp(firebaseConfig);
-                    auth = getAuth(app);
-                    db = getFirestore(app);
+                // بيانات Firebase المدمجة مباشرة
+                const firebaseConfig = {
+                    apiKey: "AIzaSyA5_Ve3nlaiuoMw35qvjxcZCQw-nmTvn6Y",
+                    authDomain: "amr4ever-6efa4.firebaseapp.com",
+                    projectId: "amr4ever-6efa4",
+                    storageBucket: "amr4ever-6efa4.firebasestorage.app",
+                    messagingSenderId: "171559645299",
+                    appId: "1:171559645299:web:d9ad8481f49e2b921e3a06"
+                };
 
-                    // المصادقة الآمنة قبل الاستعلامات (Rule 3)
-                    if (typeof __initial_auth_token !== 'undefined' && __initial_auth_token) {
-                        await signInWithCustomToken(auth, __initial_auth_token);
+                const app = initializeApp(firebaseConfig);
+                auth = getAuth(app);
+                db = getFirestore(app);
+
+                // المصادقة المجهولة
+                await signInAnonymously(auth);
+
+                onAuthStateChanged(auth, (user) => {
+                    if (user) {
+                        currentUser = user;
+                        isCloudMode = true;
+                        
+                        statusLabel.innerText = "متصل بالسحابة (مزامنة حية)";
+                        subLabel.innerText = "يتم الحفظ والتحديث في قاعدة البيانات لحظياً لجميع الأجهزة";
+                        ping.className = "animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75";
+                        dot.className = "relative inline-flex rounded-full h-3 w-3 bg-emerald-500";
+                        footerMode.innerHTML = `<i class="fa-solid fa-cloud text-emerald-500"></i> خوادم السحابة متصلة ونشطة`;
+                        
+                        // تشغيل مستمع السحابة
+                        listenToCloudSignatures();
                     } else {
-                        await signInAnonymously(auth);
+                        activateLocalStorageFallback();
                     }
-
-                    onAuthStateChanged(auth, (user) => {
-                        if (user) {
-                            currentUser = user;
-                            isCloudMode = true;
-                            
-                            statusLabel.innerText = "متصل بالسحابة (مزامنة حية)";
-                            subLabel.innerText = "يتم الحفظ والتحديث في قاعدة البيانات لحظياً لجميع الأجهزة";
-                            ping.className = "animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75";
-                            dot.className = "relative inline-flex rounded-full h-3 w-3 bg-emerald-500";
-                            footerMode.innerHTML = `<i class="fa-solid fa-cloud text-emerald-500"></i> خوادم السحابة متصلة ونشطة`;
-                            
-                            // تشغيل مستمع السحابة (Rule 2)
-                            listenToCloudSignatures();
-                        } else {
-                            activateLocalStorageFallback();
-                        }
-                    });
-                } else {
-                    activateLocalStorageFallback();
-                }
+                });
             } catch (error) {
                 console.error("Firebase connection failed, switching to Local Mode:", error);
                 activateLocalStorageFallback();
@@ -484,21 +479,18 @@
             renderLocalSignatures();
         }
 
-        // الاستماع للتواقيع من السحابة في الوقت الفعلي (Rule 1 & Rule 2)
+        // الاستماع للتواقيع من السحابة في الوقت الفعلي
         function listenToCloudSignatures() {
             if (!db || !currentUser) return;
             
-            // مسار الحفظ الآمن للبيانات العامة (Rule 1)
             const publicCollection = collection(db, 'artifacts', appId, 'public', 'data', 'signatures');
             
-            // مستمع السحابة النشط مع دالة إدارة الأخطاء (Rule 2)
             unsubscribeSignatures = onSnapshot(publicCollection, (snapshot) => {
                 const signatures = [];
                 snapshot.forEach((doc) => {
                     signatures.push({ id: doc.id, ...doc.data() });
                 });
                 
-                // الترتيب حسب وقت الإضافة محلياً بذاكرة الجافاسكربت لتفادي استعلامات الفلترة المعقدة (Rule 2)
                 signatures.sort((a, b) => a.timestamp - b.timestamp);
                 displaySignaturesUI(signatures);
             }, (error) => {
@@ -522,7 +514,7 @@
             }
         }
 
-        // تشييد وبناء واجهة التواقيع المستلمة بالتنسيق الفاخر الجديد
+        // تشييد وبناء واجهة التواقيع
         function displaySignaturesUI(signatures) {
             const grid = document.getElementById('signatures-grid');
             const countBadge = document.getElementById('count-badge');
@@ -607,7 +599,6 @@
                 return;
             }
 
-            // تفعيل حالة التحميل في زر الإرسال لمنع التكرار
             submitBtn.disabled = true;
             submitBtnText.innerHTML = `<span class="flex items-center justify-center gap-2"><span class="spinner"></span> جاري توثيق وإرسال توقيعك...</span>`;
 
@@ -625,7 +616,6 @@
                 };
 
                 if (isCloudMode) {
-                    // السحابة: فحص التكرار وجلب التواقيع (Rule 1 & Rule 2)
                     const signaturesRef = collection(db, 'artifacts', appId, 'public', 'data', 'signatures');
                     const snapshot = await getDocs(signaturesRef);
                     let isDuplicate = false;
@@ -644,11 +634,9 @@
                         return;
                     }
 
-                    // الحفظ الفعلي بالسحابة (Rule 1)
                     await addDoc(signaturesRef, votePayload);
                     showToast(`🎉 تم اعتماد توقيعك السحابي بنجاح يا ${name}`, "success");
                 } else {
-                    // التخزين المحلي الاحتياطي
                     const signatures = getLocalSignatures();
                     if (signatures.some(v => v.name.toLowerCase() === name.toLowerCase())) {
                         showToast(`⚠️ هذا الاسم مضاف ومثبت من قبل`, "warning");
@@ -664,7 +652,6 @@
                     showToast(`✅ تم حفظ توقيعك المحلي بنجاح يا ${name}`, "success");
                 }
 
-                // تفريغ المدخلات بعد النجاح
                 nameInput.value = '';
                 jobInput.value = '';
                 selectVoteDecision(true);
@@ -682,7 +669,7 @@
             }
         };
 
-        // تفريغ وتهيئة كافة تواقيع الصندوق بنظام الحوار المخصص الجديد (Custom Modal)
+        // تفريغ وتهيئة كافة تواقيع الصندوق
         window.triggerResetConfirm = () => {
             openCustomModal(async () => {
                 const submitBtn = document.getElementById('submit-btn');
@@ -690,7 +677,6 @@
                 
                 try {
                     if (isCloudMode) {
-                        // حذف السحابة بالكامل (Rule 1)
                         const signaturesRef = collection(db, 'artifacts', appId, 'public', 'data', 'signatures');
                         const snapshot = await getDocs(signaturesRef);
                         const deletePromises = [];
@@ -742,7 +728,7 @@
             }
         }
 
-        // ======== متغيرات التصويت واختيار القرارات ========
+        // ======== متغيرات التصويت ========
         let selectedApproved = true;
 
         window.selectVoteDecision = (approved) => {
@@ -759,7 +745,7 @@
             }
         };
 
-        // ======== تفعيل وإدارة النوافذ المنبثقة المخصصة (Custom Modal System) ========
+        // ======== تفعيل وإدارة النوافذ المنبثقة ========
         let activeModalConfirmCallback = null;
 
         function openCustomModal(onConfirmCallback) {
@@ -788,14 +774,13 @@
             }, 300);
         }
 
-        // تفعيل زر تأكيد المودال
         document.getElementById('modal-confirm-btn').addEventListener('click', () => {
             if (activeModalConfirmCallback) {
                 activeModalConfirmCallback();
             }
         });
 
-        // ======== دالة عرض رسائل التنبيه الفاخرة المحدثة ========
+        // ======== دالة عرض رسائل التنبيه ========
         function showToast(message, type = "success") {
             const toast = document.getElementById('toast');
             const toastMessage = document.getElementById('toast-message');
@@ -803,7 +788,6 @@
             
             toastMessage.innerText = message;
             
-            // تخصيص الأيقونة والألوان بحسب نوع الإشعار
             if (type === "success") {
                 toastIconContainer.className = "text-brand-500";
                 toastIconContainer.innerHTML = '<i class="fa-solid fa-circle-check text-xl"></i>';
@@ -824,7 +808,7 @@
             }, 4000);
         }
 
-        // ======== دالة تنظيف تهذيب حماية المدخلات ========
+        // ======== دالة تنظيف النصوص ========
         function escapeHtml(text) {
             return text
                 .replace(/&/g, "&amp;")
@@ -834,7 +818,7 @@
                 .replace(/'/g, "&#039;");
         }
 
-        // ======== دالة نسخ النص بالكامل ========
+        // ======== دالة نسخ النص ========
         window.copyLetterText = () => {
             const letterText = `التاريخ: 23 / 06 / 2026
 
@@ -862,7 +846,6 @@
 
 المطور والمصمم التقني لصندوق الحالات الطارئة – قرية محبران`;
 
-            // النسخ المتطور الآمن المناسب للإطارات (Iframe execution safe code)
             const textarea = document.createElement("textarea");
             textarea.value = letterText;
             textarea.style.position = "fixed";
@@ -880,5 +863,3 @@
     </script>
 </body>
 </html>
-
-
