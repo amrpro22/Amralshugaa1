@@ -477,6 +477,8 @@
         let isConnected = false;
         let selectedApproved = true;
         let isInitialized = false;
+        let authRetryCount = 0;
+        const MAX_AUTH_RETRIES = 5;
 
         // ======== عناصر التحكم ========
         const statusLabel = document.getElementById('sync-status-label');
@@ -487,7 +489,7 @@
         const offlineOverlay = document.getElementById('offline-overlay');
 
         // ======== دالة مساعدة لإنشاء مهلة انتظار (Timeout) لعمليات السحابة ========
-        const withTimeout = (promise, ms = 8000) => {
+        const withTimeout = (promise, ms = 10000) => {
             return Promise.race([
                 promise,
                 new Promise((_, reject) => setTimeout(() => reject(new Error("FirebaseTimeout")), ms))
@@ -497,9 +499,11 @@
         // ======== تهيئة Firebase ومصادقة المستخدم ========
         async function initFirebase() {
             try {
+                console.log("🚀 جاري تهيئة Firebase...");
                 const app = initializeApp(firebaseConfig);
                 auth = getAuth(app);
                 db = getDatabase(app);
+                console.log("✅ تم تهيئة Firebase بنجاح");
 
                 // الاستماع المباشر لحالة الاتصال الحقيقية لقاعدة البيانات
                 const connectedRef = ref(db, ".info/connected");
@@ -522,42 +526,59 @@
                         subLabel.innerText = "محاولة الاتصال بقاعدة البيانات";
                         ping.className = "absolute inline-flex h-full w-full rounded-full bg-amber-400";
                         dot.className = "relative inline-flex rounded-full h-3 w-3 bg-amber-500";
+                        footerMode.innerHTML = `<i class="fa-solid fa-wifi-slash text-amber-500"></i> ⚡ جاري الاتصال...`;
                     }
                 });
 
-                // تسجيل الدخول المجهول
-                try {
-                    await withTimeout(signInAnonymously(auth), 10000);
-                } catch (authError) {
-                    console.error("Authentication Error:", authError);
-                    // محاولة إعادة تسجيل الدخول مرة أخرى بعد ثانية
-                    setTimeout(async () => {
-                        try {
-                            await signInAnonymously(auth);
-                        } catch (retryError) {
-                            console.error("Retry authentication failed:", retryError);
-                            showToast("⚠️ فشل المصادقة مع Firebase. تأكد من تفعيل Anonymous Sign-In", "error");
+                // ======== محاولة المصادقة مع إعادة المحاولة التلقائية ========
+                async function attemptAuth() {
+                    try {
+                        console.log(`🔐 محاولة تسجيل الدخول المجهول (محاولة ${authRetryCount + 1})...`);
+                        await withTimeout(signInAnonymously(auth), 15000);
+                        console.log("✅ تم تسجيل الدخول بنجاح");
+                        authRetryCount = 0;
+                    } catch (authError) {
+                        console.error("❌ فشل المصادقة:", authError);
+                        authRetryCount++;
+                        
+                        if (authRetryCount < MAX_AUTH_RETRIES) {
+                            const delay = Math.min(3000 * authRetryCount, 15000);
+                            console.log(`⏳ إعادة المحاولة بعد ${delay/1000} ثواني...`);
+                            subLabel.innerText = `إعادة محاولة المصادقة (${authRetryCount}/${MAX_AUTH_RETRIES})`;
+                            setTimeout(attemptAuth, delay);
+                        } else {
+                            console.error("❌ فشلت جميع محاولات المصادقة");
+                            showToast("⚠️ فشل الاتصال بـ Firebase. تأكد من تفعيل Anonymous Authentication في Firebase Console", "error");
+                            offlineOverlay.classList.add('active');
+                            statusLabel.innerText = "❌ فشل المصادقة";
+                            subLabel.innerText = "تأكد من إعدادات Firebase";
                         }
-                    }, 1000);
+                    }
                 }
 
+                // بدء المصادقة
+                await attemptAuth();
+
+                // مراقبة حالة المصادقة
                 onAuthStateChanged(auth, (user) => {
                     if (user) {
-                        console.log("✅ Authenticated successfully");
+                        console.log("👤 المستخدم:", user.uid);
                         isInitialized = true;
-                        // الاستماع للتواقيع فقط إذا كان الاتصال نشطاً
                         if (isConnected) {
                             listenToCloudSignatures();
                         }
                     } else {
-                        console.log("❌ Not authenticated");
-                        // لا نعرض overlay هنا لأن المصادقة قد تكون قيد المعالجة
+                        console.log("❌ لا يوجد مستخدم - محاولة إعادة المصادقة");
+                        if (authRetryCount < MAX_AUTH_RETRIES) {
+                            attemptAuth();
+                        }
                     }
                 });
 
             } catch (error) {
-                console.error("Firebase connection/auth failed:", error);
-                handleDisconnect();
+                console.error("❌ فشل تهيئة Firebase:", error);
+                showToast("❌ فشل الاتصال بـ Firebase: " + error.message, "error");
+                offlineOverlay.classList.add('active');
             }
         }
 
@@ -575,7 +596,7 @@
         // ======== الاستماع للتواقيع ========
         function listenToCloudSignatures() {
             if (!db || !auth || !auth.currentUser) {
-                console.log("⏳ Waiting for auth before listening to signatures...");
+                console.log("⏳ انتظار المصادقة قبل الاستماع للتواقيع...");
                 return;
             }
             
@@ -597,7 +618,7 @@
                     
                     displaySignaturesUI(signatures);
                 }, (error) => {
-                    console.error("Error reading signatures:", error);
+                    console.error("❌ خطأ في قراءة التواقيع:", error);
                     // محاولة إعادة الاتصال بعد خطأ
                     setTimeout(() => {
                         if (auth && auth.currentUser) {
@@ -606,7 +627,7 @@
                     }, 5000);
                 });
             } catch (error) {
-                console.error("Failed to listen to signatures:", error);
+                console.error("❌ فشل الاستماع للتواقيع:", error);
             }
         }
 
@@ -732,7 +753,7 @@
                 const signaturesRef = ref(db, 'amr4admin/voting_submissions');
                 
                 // قراءة البيانات من السحابة مع مهلة
-                const snapshot = await withTimeout(get(signaturesRef), 8000);
+                const snapshot = await withTimeout(get(signaturesRef), 10000);
                 
                 let isDuplicate = false;
                 if (snapshot.exists()) {
@@ -755,7 +776,7 @@
 
                 // حفظ التوقيع
                 const newVoteRef = push(signaturesRef);
-                await withTimeout(set(newVoteRef, votePayload), 8000);
+                await withTimeout(set(newVoteRef, votePayload), 10000);
                 
                 showToast(`🎉 تم اعتماد توقيع "${name}" بنجاح`, "success");
 
@@ -765,7 +786,7 @@
                 selectVoteDecision(true);
 
             } catch (err) {
-                console.error("Signature failed:", err);
+                console.error("❌ فشل حفظ التوقيع:", err);
                 if (err.message === "FirebaseTimeout") {
                     showToast("❌ انتهت مهلة الاتصال بالخادم. تحقق من الإنترنت", "error");
                 } else if (err.code === "PERMISSION_DENIED") {
